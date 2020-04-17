@@ -17,11 +17,9 @@
       <input type="hidden" id="latitude" name="latitude" value="">
       <input type="hidden" id="longitude" name="longitude" value="">
       <div class="input-group-append">
-        <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Ricerca</button>
+        <button id="ricerca" class="btn btn-outline-secondary" type="submit" disabled id="button-addon2">Ricerca</button>
       </div>
     </form>
-
-
 
 <div class="row d-flex justify-content-between">
     @foreach ($apartments as $apartment)

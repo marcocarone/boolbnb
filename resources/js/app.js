@@ -52,6 +52,11 @@ $(document).ready(function() {
         $('#address').val($(this).text());
         $('#latitude').val($(this).data('latitude'));
         $('#longitude').val($(this).data('longitude'));
+        if ($('#latitude').val().length !== 0 ) {
+          $('#ricerca').removeAttr('disabled');
+            $('#ricerca').removeClass('btn-outline-secondary');
+            $('#ricerca').addClass('btn-success');
+        }
     });
 
     var latitude = $(".map").attr("data-lat");
