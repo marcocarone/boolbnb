@@ -37130,9 +37130,17 @@ $(document).ready(function () {
   });
   map.addControl(new tt.FullscreenControl());
   map.addControl(new tt.NavigationControl());
-  var marker = new tt.Marker({
-    draggable: false
-  }).setLngLat(center).addTo(map);
+
+  for (var z = 0; z < $(".coordinates").length; z++) {
+    // console.log( $(".coordinates")[z].getAttribute("data-lat"));
+    var latitude2 = $(".coordinates")[z].getAttribute("data-lat");
+    var longitude2 = $(".coordinates")[z].getAttribute("data-lon"); // marker mappa
+
+    var marker = new tt.Marker({
+      draggable: false
+    }).setLngLat([longitude2, latitude2]).addTo(map);
+    marker.on('dragend', onDragEnd);
+  }
 
   function onDragEnd() {
     var lngLat = marker.getLngLat();
@@ -37142,8 +37150,6 @@ $(document).ready(function () {
     marker.setPopup(popup);
     marker.togglePopup();
   }
-
-  marker.on('dragend', onDragEnd);
 });
 
 /***/ }),
@@ -37211,8 +37217,8 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\marco\Desktop\mamp\boolbnb-team1\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\marco\Desktop\mamp\boolbnb-team1\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\marco\Desktop\mamp\boolbnb\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\marco\Desktop\mamp\boolbnb\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

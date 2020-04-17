@@ -72,7 +72,7 @@
             </div>
         </div>
         <div class=" m-2 col-md-5">
-            <div class="card-body">
+            <div class="card-body coordinates"  data-lat="{{$apartment->latitude}}" data-lon="{{$apartment->longitude}}">
                 <h4 class="card-title mt-3 text-center"> Indirizzo</h4>
                 <p class="card-text text-center"> {{$apartment->address}}</p>
             </div>

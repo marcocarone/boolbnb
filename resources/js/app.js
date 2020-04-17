@@ -79,9 +79,20 @@ $(document).ready(function() {
     map.addControl(new tt.FullscreenControl());
     map.addControl(new tt.NavigationControl());
 
-    var marker = new tt.Marker({
-        draggable: false
-    }).setLngLat(center).addTo(map);
+    for (var z = 0; z < $(".coordinates").length; z++) {
+        // console.log( $(".coordinates")[z].getAttribute("data-lat"));
+
+        var latitude2 = $(".coordinates")[z].getAttribute("data-lat");
+        var longitude2 = $(".coordinates")[z].getAttribute("data-lon");
+
+        // marker mappa
+        var marker = new tt.Marker({
+            draggable: false
+        }).setLngLat([longitude2, latitude2]).addTo(map);
+
+        marker.on('dragend', onDragEnd);
+    }
+
 
     function onDragEnd() {
         var lngLat = marker.getLngLat();
@@ -93,6 +104,7 @@ $(document).ready(function() {
         marker.togglePopup();
     }
 
-    marker.on('dragend', onDragEnd);
+
+
 
 });

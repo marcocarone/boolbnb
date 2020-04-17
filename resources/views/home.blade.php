@@ -2,6 +2,27 @@
 @section('content')
 <div class="container">
 
+    <form class="input-group mb-3 " action="{{route('search.index')}}" method="post">
+    	@csrf
+    	@method('POST')
+      <input id="address" class="form-control @error("address") is-invalid @enderror" placeholder="Cerca appartamento" type="text" name="address" autocomplete="off" required minlength="4" maxlength="255">
+        @error("address")
+      <span class="invalid-feedback d-block" role="alert">
+        <strong>{{ $message }}</strong>
+      </span>
+        @enderror
+      <div class="dropdown-address hidden">
+        <ul class="list-unstyled m-0"></ul>
+      </div>
+      <input type="hidden" id="latitude" name="latitude" value="">
+      <input type="hidden" id="longitude" name="longitude" value="">
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Ricerca</button>
+      </div>
+    </form>
+
+
+
 <div class="row d-flex justify-content-between">
     @foreach ($apartments as $apartment)
     <div class="card-deck col-md-4 mb-4">
