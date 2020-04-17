@@ -43,7 +43,7 @@ $(document).ready(function() {
                     }
                 });
             }
-        }, 600);
+        }, 200);
     });
     $(document).on("click", function() {
         $(".dropdown-address").addClass("hidden");
