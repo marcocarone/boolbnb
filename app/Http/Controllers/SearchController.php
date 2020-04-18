@@ -12,6 +12,7 @@ class SearchController extends Controller
     public function index(Request $request)
     {
         $data = $request->all();
+
         $apartments = Apartment::where('active', '1')->get();
         $apartmentsInRadius = [];
         foreach ($apartments as  $apartment) {
@@ -20,10 +21,13 @@ class SearchController extends Controller
                 $apartmentsInRadius[] = $apartment;
             }
         }
+        $services = Service::all();
         $data =[
+      "address" => $data["address"],
       "apartmentsInRadius" => $apartmentsInRadius,
       "centerLatitude" => $data["latitude"],
-      "centerLongitude" => $data["longitude"]
+      "centerLongitude" => $data["longitude"],
+      "services" => $services
     ];
 
         return view('search', $data);

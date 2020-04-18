@@ -77,15 +77,15 @@
 
     @if ( $apartment->user->id !== Auth::id())
     <div class="card m-2">
-        {{-- Richiesta info --}}
-        {{-- {{route('upr.message.store')}} --}}
+
+
         <div class="card-body">
             <form action="{{(Auth::user()) ? route('upr.message.store') : route('guest.message.store')}}" method="post">
                 @csrf
                 @method('POST')
                 <div class="form-group">
                     <label for="exampleInputEmail1">Email</label>
-                    <input type="email" class="form-control " name="email" {{(Auth::user()) ? "disabled" : ''}} value="{{(Auth::user()) ? Auth::user()->email : ''}}" required maxlength="90" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    <input type="email" class="form-control " name="email"  value="{{(Auth::user()) ? Auth::user()->email : ''}}" required maxlength="90"   {{(Auth::user()) ? "readonly='readonly'" : ''}} id="exampleInputEmail1" aria-describedby="emailHelp">
                     <label for="message">Messaggio</label>
                     <textarea class="form-control" name="message" required minlength="10" maxlength="700" id="message" cols="30" rows="10"></textarea>
 

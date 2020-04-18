@@ -34,8 +34,10 @@ class Apartment extends Model
    {
        return $this->hasMany('App\Image');
    }
+
    public function messages()
    {
        return $this->hasMany('App\Message');
    }
+
 }

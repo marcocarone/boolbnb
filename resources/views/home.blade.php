@@ -5,7 +5,7 @@
     <form class="input-group mb-3 " action="{{route('search.index')}}" method="post">
     	@csrf
     	@method('POST')
-      <input id="address" class="form-control @error("address") is-invalid @enderror" placeholder="Cerca appartamento" type="text" name="address" autocomplete="off" required minlength="4" maxlength="255">
+      <input id="address" class="form-control @error("address") is-invalid @enderror" placeholder="Via, numero civico, città" type="text" name="address" autocomplete="off" required minlength="4" maxlength="255">
         @error("address")
       <span class="invalid-feedback d-block" role="alert">
         <strong>{{ $message }}</strong>
