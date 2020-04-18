@@ -62,7 +62,7 @@
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                   <a class="dropdown-item" href="{{route("upr.dashboard")}}">Dashboard</a>
-
+                                  <a class="dropdown-item" href="{{route("upr.message.index")}}">Messaggi</a>
                                   <a class="dropdown-item" href="{{route("upr.apartments.index")}}">Gestisci i tuoi alloggi</a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();

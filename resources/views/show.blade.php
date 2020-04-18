@@ -1,8 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-
-
 <div class="container">
 
     <div>
@@ -68,15 +66,42 @@
             </div>
         </div>
         <div class=" m-2 col-md-5">
-            <div class="card-body coordinates"  data-lat="{{$apartment->latitude}}" data-lon="{{$apartment->longitude}}">
+            <div class="card-body coordinates" data-lat="{{$apartment->latitude}}" data-lon="{{$apartment->longitude}}">
                 <h4 class="card-title mt-3 text-center"> Indirizzo</h4>
                 <p class="card-text text-center"> {{$apartment->address}}</p>
             </div>
         </div>
     </div>
 
-    <div id="map"  class='map card m-2 col-md-12' data-lat="{{$apartment->latitude}}" data-lon="{{$apartment->longitude}}"></div>
-</div>
+    <div id="map" class='map card m-2 col-md-12' data-lat="{{$apartment->latitude}}" data-lon="{{$apartment->longitude}}"></div>
 
+    @if ( $apartment->user->id !== Auth::id())
+    <div class="card m-2">
+        {{-- Richiesta info --}}
+        {{-- {{route('upr.message.store')}} --}}
+        <div class="card-body">
+            <form action="{{(Auth::user()) ? route('upr.message.store') : route('guest.message.store')}}" method="post">
+                @csrf
+                @method('POST')
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Email</label>
+                    <input type="email" class="form-control " name="email" {{(Auth::user()) ? "disabled" : ''}} value="{{(Auth::user()) ? Auth::user()->email : ''}}" required maxlength="90" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    <label for="message">Messaggio</label>
+                    <textarea class="form-control" name="message" required minlength="10" maxlength="700" id="message" cols="30" rows="10"></textarea>
 
-@endsection
+                </div>
+                <input type="hidden" name="apartment_id" value="{{$apartment->id}}">
+                <button class="btn btn-success" type="submit">Invia</button>
+
+            </form>
+            @if (session('status'))
+            <div class="alert alert-success">
+                {{ session('status') }}
+            </div>
+            @endif
+        </div>
+
+    </div>
+    @endif
+
+    @endsection

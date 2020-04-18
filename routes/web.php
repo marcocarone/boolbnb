@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', 'ApartmentController@index')->name('home');
 Route::post('/search', 'SearchController@index')->name('search.index');
 Route::get('/apartment/{apartment}', 'ApartmentController@show')->name('apartment.show');
+Route::post('/guest/messages', 'MessageController@store')->name('guest.message.store');
 
 
 Auth::routes();
@@ -27,10 +28,9 @@ Auth::routes();
 Route::name('upr.')->prefix('upr')->namespace('Upr')->middleware('auth')->group(function () {
     Route::get('/dashboard', 'HomeController@index')->name('dashboard');
     Route::resource('apartments', 'ApartmentController');
-
-
     Route::get('/apartment/{apartment}', 'ApartmentController@show2')->name('apartment.show2');
     Route::resource('images', 'ImageController');
     Route::post('delete', 'ImageController@deleteImage');
+    Route::resource('message', 'MessageController');
 
 });
