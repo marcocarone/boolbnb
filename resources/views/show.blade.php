@@ -11,7 +11,7 @@
 			<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
 				<div class="carousel-inner">
 					<div class="carousel-item active slider">
-						<img class="card-img-top" src="{{$apartment->cover_img)}}" alt="{{$apartment->title}}">
+						<img class="card-img-top" src="{{asset($apartment->cover_img)}}" alt="{{$apartment->title}}">
 					</div>
 					@foreach ($apartment->images as $image)
 					<div class="carousel-item slider">
