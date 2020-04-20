@@ -32,7 +32,7 @@
 	<div class="d-flex justify-content-center messageResult"></div>
 	<div id="apartments" class="row d-flex justify-content-between">
 		@foreach ($apartmentsInRadius as $apartment)
-		<div class="apartment card-deck col-md-4 mb-4">
+		<div class="apartment card-deck col-md-4 mb-4" data-id="{{$apartment->id}}">
 			<div class="card">
 				<div class="imgdiv">
 					<a href="{{route("apartment.show", $apartment)}}" class="stretched-link">
@@ -61,14 +61,14 @@
 </div>
 
 <script id="entry-template" type="text/x-handlebars-template">
-	<div class="apartment card-deck col-md-4 mb-4">
+	<div class="apartment card-deck col-md-4 mb-4" data-id="@{{id}}">
 		<div class="card">
 			<div class="imgdiv">
 				<a href="@{{show_route}}" class="stretched-link">
 					<img class="image_home" src="@{{cover_img}}" class="card-img-top" alt="@{{title}}">
 				</a>
 			</div>
-			<div  class="card-body coordinates"  data-lat="@{{latitude}}" data-lon="@{{longitude}}">
+			<div  class="card-body coordinates" data-lat="@{{latitude}}" data-lon="@{{longitude}}">
 				<a href="@{{show_route}}">
 					<h5 class="card-title">@{{title}}</h5>
 				</a>

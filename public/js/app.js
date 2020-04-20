@@ -42202,6 +42202,17 @@ $(document).ready(function () {
     $('#ricerca').prop('disabled', true);
     $("#ricerca").addClass("btn-outline-secondary");
     $("#ricerca").removeClass("btn-success");
+  }); // cambio icona marker per app in hover
+
+  $(".apartment").on({
+    mouseenter: function mouseenter() {
+      var thisId = $(this).data('id');
+      $('.markerHome[data-id="' + thisId + '"]').addClass('selected-marker');
+    },
+    mouseleave: function mouseleave() {
+      var thisId = $(this).data('id');
+      $('.markerHome[data-id="' + thisId + '"]').removeClass('selected-marker');
+    }
   }); // filtro dei servizi
 
   $(".checkbox").change(function () {
@@ -42250,7 +42261,7 @@ function generateTomTomMap() {
     key: 'z4n3yxl4X8bvK1BA6YlSAaYcV7OTbkZc',
     style: 'tomtom://vector/1/basic-main',
     center: [$("#map").attr("data-lon"), $("#map").attr("data-lat")],
-    zoom: 10
+    zoom: 11
   });
   return map;
 }
@@ -42281,6 +42292,11 @@ function generateMarker(map) {
   apartmentArray.forEach(function (apartment) {
     var element = document.createElement('div');
     element.classList.add("markerHome");
+
+    if (!isShow) {
+      element.setAttribute('data-id', apartment.show.split('/').reverse()[0]);
+    }
+
     var marker = new tt.Marker({
       element: element
     }).setLngLat([apartment.longitude, apartment.latitude]).addTo(map);
@@ -42292,7 +42308,7 @@ function generateMarker(map) {
         left: [25, -35],
         right: [-25, -35]
       };
-      var htmlApt = "<a style='text-decoration: none; color:#000;' href='" + apartment.show + "'><div style='display:flex; flex-direction: column; width:220px; height:180px;'><b>" + apartment.title + "</b><img style='width:220px; background-size: cover;' src='" + apartment.cover_img + "'></div></a>";
+      var htmlApt = "<a style='text-decoration: none; color:#000;' href='" + apartment.show + "'><div style='display:flex; flex-direction: column; width:220px; height:180px;'><b style='padding:5px'>" + apartment.title + "</b><img style='width:220px; background-size: cover;' src='" + apartment.cover_img + "'></div></a>";
       var popup = new tt.Popup({
         offset: popupOffsets
       }).setHTML(htmlApt);

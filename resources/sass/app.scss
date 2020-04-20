@@ -65,8 +65,8 @@
 .markerHome {
 	background-image: url('/storage/assets/home_icon.png');
 	background-size: cover;
-	width: 30px;
-	height: 30px;
+	width: 25px;
+	height: 25px;
 	cursor: pointer;
 }
 
@@ -74,4 +74,8 @@
 	padding: 0 !important;
 	border-radius: 5px !important;
 	overflow: hidden !important;
+}
+
+.selected-marker {
+	background-image: url('/storage/assets/marker_selected.png');
 }
