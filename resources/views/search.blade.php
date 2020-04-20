@@ -14,10 +14,10 @@
 		<div class="dropdown-address hidden">
 			<ul class="list-unstyled m-0"></ul>
 		</div>
-			<input type="hidden" id="latitude" name="latitude" value="">
-			<input type="hidden" id="longitude" name="longitude" value="">
+		<input type="hidden" id="latitude" name="latitude" value="">
+		<input type="hidden" id="longitude" name="longitude" value="">
 		<div class="input-group-append">
-			<button class="btn btn-outline-secondary" type="submit" id="button-addon2">Ricerca</button>
+			<button id="ricerca" class="btn btn-outline-secondary" type="submit" disabled id="button-addon2">Ricerca</button>
 		</div>
 	</form>
 	<div class="form-group col-md-12 d-flex justify-content-between services">
@@ -28,6 +28,35 @@
 				<span>{{$service->title}}</span>
 			</div>
 		@endforeach
+	</div>
+	<div class="form-group col-md-12 d-flex justify-content-center">
+		<div class="flex-grow-1">
+			<label for="distance">Raggio di ricerca (Km) - </label>
+			<span><strong>100</strong></span>
+			<input type="range" class="custom-range" min="20" max="100" step="1" id="distance">
+		</div>
+	</div>
+	<div class="form-group col-md-12 d-flex justify-content-center align-items-center">
+		<p class="mb-0 mr-4">Numero di stanze:</p>
+		<div class="btn-counter d-flex justify-content-center align-items-center">
+			<button class="btn btn-circle">
+				<span>-</span>
+			</button>
+			<span><strong>0</strong></span>
+			<button class="btn btn-circle">
+				<span>+</span>
+			</button>
+		</div>
+		<p class="mb-0 mr-4 ml-5">Numero di bagni:</p>
+		<div class="btn-counter d-flex justify-content-center align-items-center">
+			<button class="btn btn-circle">
+				<span>-</span>
+			</button>
+			<span><strong>0</strong></span>
+			<button class="btn btn-circle">
+				<span>+</span>
+			</button>
+		</div>
 	</div>
 	<div class="d-flex justify-content-center messageResult"></div>
 	<div id="apartments" class="row d-flex justify-content-between">
