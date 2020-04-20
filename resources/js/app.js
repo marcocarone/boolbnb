@@ -28,7 +28,7 @@ $(document).ready(function() {
 						'language': "it-IT",
 						'idxSet': "Geo,Str,PAD",
 						'entityType': "CountrySubdivision,Municipality",
-						'key': "z4n3yxl4X8bvK1BA6YlSAaYcV7OTbkZc"
+						'key': "hybTDScBzqzH9mWgKjU0mSeOf7eDO4AV"
 					},
 					success: function(response) {
 						var suggestions = [];
@@ -114,16 +114,19 @@ $(document).ready(function() {
 function generateTomTomMap() {
 	var map = tt.map({
 		container: 'map',
-		key: 'z4n3yxl4X8bvK1BA6YlSAaYcV7OTbkZc',
+		key: 'hybTDScBzqzH9mWgKjU0mSeOf7eDO4AV',
 		style: 'tomtom://vector/1/basic-main',
 		center: [$("#map").attr("data-lon"), $("#map").attr("data-lat")],
 		zoom: 11
 	});
+	map.addControl(new tt.FullscreenControl());
+	map.addControl(new tt.NavigationControl());
 	return map;
 }
 
 function generateMarker(map) {
 	$("div.markerHome").remove();
+	$("div.mapboxgl-popup").remove();
 	apartmentArray = [];
 	var isShow;
 	$(".apartment-show").length == 1 ? isShow = true : isShow = false;
