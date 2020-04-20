@@ -29,14 +29,17 @@
 			</div>
 		@endforeach
 	</div>
+	<div class="d-flex justify-content-center messageResult"></div>
 	<div id="apartments" class="row d-flex justify-content-between">
 		@foreach ($apartmentsInRadius as $apartment)
-		<div class="card-deck col-md-4 mb-4">
+		<div class="apartment card-deck col-md-4 mb-4">
 			<div class="card">
 				<div class="imgdiv">
-					<a href="{{route("apartment.show", $apartment)}}" class="stretched-link"><img class="image_home" src="{{asset('storage/' . $apartment->cover_img)}}" class="card-img-top" alt="{{$apartment->title}}"></a>
+					<a href="{{route("apartment.show", $apartment)}}" class="stretched-link">
+						<img class="image_home" src="{{asset($apartment->cover_img)}}" class="card-img-top" alt="{{$apartment->title}}">
+					</a>
 				</div>
-				<div  class="card-body coordinates"  data-lat="{{$apartment->latitude}}" data-lon="{{$apartment->longitude}}">
+				<div class="card-body coordinates" data-lat="{{$apartment->latitude}}" data-lon="{{$apartment->longitude}}">
 					<a href="{{route("apartment.show", $apartment)}}">
 						<h5 class="card-title">{{$apartment->title}}</h5>
 					</a>
@@ -57,14 +60,12 @@
 	<div id="map" class='map card m-2 col-md-12' data-lat="{{$centerLatitude}}" data-lon="{{$centerLongitude}}"></div>
 </div>
 
-
-
 <script id="entry-template" type="text/x-handlebars-template">
-	<div class="card-deck col-md-4 mb-4">
+	<div class="apartment card-deck col-md-4 mb-4">
 		<div class="card">
 			<div class="imgdiv">
 				<a href="@{{show_route}}" class="stretched-link">
-					<img class="image_home" src="@{{cover_img_hb}}" class="card-img-top" alt="@{{title}}">
+					<img class="image_home" src="@{{cover_img}}" class="card-img-top" alt="@{{title}}">
 				</a>
 			</div>
 			<div  class="card-body coordinates"  data-lat="@{{latitude}}" data-lon="@{{longitude}}">

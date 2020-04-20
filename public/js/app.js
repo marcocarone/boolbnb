@@ -42136,13 +42136,19 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 var Handlebars = __webpack_require__(/*! handlebars */ "./node_modules/handlebars/dist/cjs/handlebars.js");
 
 $(document).ready(function () {
+  // mappa
+  if ($('#map').length != 0) {
+    var ttMap = generateTomTomMap();
+    generateMarker(ttMap);
+  } ////////
+
+
   var oldquery;
   $("#address").keyup(function (event) {
     var query = event.target.value;
     oldquery = query;
     setTimeout(function () {
       if (query == oldquery) {
-        console.log(query);
         $.ajax({
           url: "https://api.tomtom.com/search/2/search/" + query + ".json?",
           method: "GET",
@@ -42157,7 +42163,6 @@ $(document).ready(function () {
             'key': "z4n3yxl4X8bvK1BA6YlSAaYcV7OTbkZc"
           },
           success: function success(response) {
-            console.log(response);
             var suggestions = [];
 
             for (var i = 0; suggestions.length < 5 && response.results[i]; i++) {
@@ -42189,12 +42194,14 @@ $(document).ready(function () {
     $("#address").val($(this).text());
     $("#latitude").val($(this).data("latitude"));
     $("#longitude").val($(this).data("longitude"));
-
-    if ($("#latitude").val().length !== 0) {
-      $("#ricerca").removeAttr("disabled");
-      $("#ricerca").removeClass("btn-outline-secondary");
-      $("#ricerca").addClass("btn-success");
-    }
+    $("#ricerca").removeAttr("disabled");
+    $("#ricerca").removeClass("btn-outline-secondary");
+    $("#ricerca").addClass("btn-success");
+  });
+  $('#address').on('input', function () {
+    $('#ricerca').prop('disabled', true);
+    $("#ricerca").addClass("btn-outline-secondary");
+    $("#ricerca").removeClass("btn-success");
   }); // filtro dei servizi
 
   $(".checkbox").change(function () {
@@ -42205,71 +42212,93 @@ $(document).ready(function () {
       url: "api/filtered",
       method: "POST",
       data: {
-        'services': services_array
+        'services': services_array,
+        'centerLongLat': [$("#map").data("lon"), $("#map").data("lat")]
       },
       dataType: "json",
       success: function success(data, message, xhr) {
+        console.log(data);
+
         if (xhr.status == 200) {
           $("#apartments").empty();
+          $("div.messageResult").empty();
           var template = Handlebars.compile($("#entry-template").html());
 
           for (var index = 0; index < data.results.length; index++) {
-            var payload = data.results[index];
-            payload["cover_img_hb"] = "/storage/" + data.results[index].cover_img;
-            payload["show_route"] = "/apartment/" + data.results[index].id;
-            console.log(payload);
-            $("#apartments").append(template(payload));
+            $("#apartments").append(template(data.results[index]));
           }
 
-          generateMarker(map);
+          generateMarker(ttMap);
+
+          if (!data.results.length) {
+            $(".messageResult").append('<h2>La ricerca non ha prodotto risultati</h2>');
+          }
+        } else {
+          $(".messageResult").append('<h2>Errore server APi</h2>');
         }
       },
       error: function error() {
-        console.log("error");
+        $(".messageResult").append('<h2>Impossibile effettuare la richiesta</h2>');
       }
     });
-  }); // mappa
-
-  var latitude = $(".map").attr("data-lat");
-  var longitude = $(".map").attr("data-lon");
-  var center = [longitude, latitude];
-  var map = tt.map({
-    key: "z4n3yxl4X8bvK1BA6YlSAaYcV7OTbkZc",
-    container: "map",
-    style: "tomtom://vector/1/basic-main",
-    center: [longitude, latitude],
-    zoom: 10
   });
-  var config = {
-    key: "z4n3yxl4X8bvK1BA6YlSAaYcV7OTbkZc",
-    style: "tomtom://vector/2/relative",
-    refresh: 30000
-  };
-  map.on("load", function () {
-    map.addTier(new tt.TrafficFlowTilesTier(config));
-  });
-  map.addControl(new tt.FullscreenControl());
-  map.addControl(new tt.NavigationControl());
-  generateMarker(map);
 });
 
-function onDragEnd() {
-  var lngLat = marker.getLngLat();
-  lngLat = new tt.LngLat(roundLatLng(lngLat.lng), roundLatLng(lngLat.lat));
-  popup.setHTML(lngLat.toString());
-  popup.setLngLat(lngLat);
-  marker.setPopup(popup);
-  marker.togglePopup();
+function generateTomTomMap() {
+  var map = tt.map({
+    container: 'map',
+    key: 'z4n3yxl4X8bvK1BA6YlSAaYcV7OTbkZc',
+    style: 'tomtom://vector/1/basic-main',
+    center: [$("#map").attr("data-lon"), $("#map").attr("data-lat")],
+    zoom: 10
+  });
+  return map;
 }
 
 function generateMarker(map) {
-  for (var z = 0; z < $(".coordinates").length; z++) {
-    var latitude2 = $(".coordinates")[z].getAttribute("data-lat");
-    var longitude2 = $(".coordinates")[z].getAttribute("data-lon");
-    var marker = new tt.Marker({
-      draggable: false
-    }).setLngLat([longitude2, latitude2]).addTo(map).on("dragend", onDragEnd);
+  $("div.markerHome").remove();
+  apartmentArray = [];
+  var isShow;
+  $(".apartment-show").length == 1 ? isShow = true : isShow = false;
+
+  if (isShow) {
+    apartmentArray.push({
+      'longitude': $(".coordinates").data('lon'),
+      'latitude': $(".coordinates").data('lat')
+    });
+  } else {
+    for (var i = 0; i < $(".apartment").length; i++) {
+      apartmentArray.push({
+        'show': $(".apartment .imgdiv a")[i].getAttribute("href"),
+        'title': $(".apartment .image_home")[i].getAttribute('alt'),
+        'cover_img': $(".apartment .image_home")[i].getAttribute('src'),
+        'longitude': $(".apartment .coordinates")[i].getAttribute('data-lon'),
+        'latitude': $(".apartment .coordinates")[i].getAttribute('data-lat')
+      });
+    }
   }
+
+  apartmentArray.forEach(function (apartment) {
+    var element = document.createElement('div');
+    element.classList.add("markerHome");
+    var marker = new tt.Marker({
+      element: element
+    }).setLngLat([apartment.longitude, apartment.latitude]).addTo(map);
+
+    if (!isShow) {
+      var popupOffsets = {
+        top: [0, 0],
+        bottom: [0, -40],
+        left: [25, -35],
+        right: [-25, -35]
+      };
+      var htmlApt = "<a style='text-decoration: none; color:#000;' href='" + apartment.show + "'><div style='display:flex; flex-direction: column; width:220px; height:180px;'><b>" + apartment.title + "</b><img style='width:220px; background-size: cover;' src='" + apartment.cover_img + "'></div></a>";
+      var popup = new tt.Popup({
+        offset: popupOffsets
+      }).setHTML(htmlApt);
+      marker.setPopup(popup);
+    }
+  });
 }
 
 /***/ }),
@@ -42337,8 +42366,8 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\marco\Desktop\mamp\boolbnb\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\marco\Desktop\mamp\boolbnb\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\NIK\Desktop\Corso_Boolean\esercizi\boolbnb\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\NIK\Desktop\Corso_Boolean\esercizi\boolbnb\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

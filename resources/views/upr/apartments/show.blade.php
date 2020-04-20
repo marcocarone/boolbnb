@@ -12,12 +12,12 @@
           <a class="btn btn-primary mb-3" href="{{route("upr.apartment.show2", $apartment)}}">Galleria immagini</a>
         </div>
     </div>
-    <div class="card m-2">
+    <div class="apartment-show card m-2">
         <div class="card-body">
           <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
               <div class="carousel-inner">
                   <div class="carousel-item active slider">
-                      <img class="card-img-top " src="{{asset('storage/' . $apartment->cover_img)}}" alt="{{$apartment->title}}">
+                      <img class="card-img-top" src="{{asset($apartment->cover_img)}}" alt="{{$apartment->title}}">
                   </div>
                   @foreach ($apartment->images as $image)
                   <div class="carousel-item slider">

@@ -6,7 +6,7 @@
     <div class="card mb-3" style="max-width: 100%;">
         <div class="row no-gutters">
             <div class="col-md-2 img_apart_container">
-                <img src="{{asset('storage/' . $apartment->cover_img)}}" class="img_apart" alt="">
+                <img src="{{asset($apartment->cover_img)}}" class="img_apart" alt="">
             </div>
             <div class="col-md-8">
                 <div class="card-body">

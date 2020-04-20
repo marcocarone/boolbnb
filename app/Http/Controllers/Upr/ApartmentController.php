@@ -75,7 +75,7 @@ class ApartmentController extends Controller
 		$newApartment->longitude = $data['longitude'];
 		$newApartment->price = $data['price'];
 		$newApartment->user_id = $idUser;
-		$newApartment->cover_img = $path;
+		$newApartment->cover_img = 'storage/' . $path;
 
 		$saved = $newApartment->save();
 		$apartmentId = $newApartment->id;

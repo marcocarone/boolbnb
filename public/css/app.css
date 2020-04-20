@@ -10941,3 +10941,17 @@ a.text-dark:focus {
   display: none;
 }
 
+.markerHome {
+  background-image: url("/storage/assets/home_icon.png");
+  background-size: cover;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.mapboxgl-popup-content {
+  padding: 0 !important;
+  border-radius: 5px !important;
+  overflow: hidden !important;
+}
+

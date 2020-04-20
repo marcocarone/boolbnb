@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Seeder;
 use App\Apartment;
-use App\User;
 use App\Service;
+use App\User;
 use Faker\Generator as Faker;
+use Illuminate\Database\Seeder;
 
 class ApartmentsTableSeeder extends Seeder
 {
@@ -17,20 +17,20 @@ class ApartmentsTableSeeder extends Seeder
 	{
 		$apartmentTemplate = [
 			'title' => [
-					'Marco e Laura B & B: camera doppia- Aurelio, Roma , Lazio',
-					'Laterano238apartment- Celio, Roma, Lazio',
-					'IN FRONT OF THE COLISEUM- Monti, Roma , Lazio',
-					'Deluxe Twin Ensuite- Castro Pretorio, Roma , Lazio',
-					'Rome Apartment Campo de Fiori- Ponte, Roma , Lazio',
-					'Attico Luminoso Deluxe IN FRONT Quirinale',
-					'Intero appartamento affittato da Mauro',
-					'Tuscan Apt in the heart of Florence',
-					'The Smallest Apartment With The Biggest View',
-					'BLUE STUDIO34 APARTMENTS',
-					'Attico vista mare al centro di Napoli',
-					'Bilocale a due passi dal Centro di Torino',
-					'Nel Cuore del Barocco Leccese'
-				],
+				'Marco e Laura B & B: camera doppia- Aurelio, Roma , Lazio',
+				'Laterano238apartment- Celio, Roma, Lazio',
+				'IN FRONT OF THE COLISEUM- Monti, Roma , Lazio',
+				'Deluxe Twin Ensuite- Castro Pretorio, Roma , Lazio',
+				'Rome Apartment Campo de Fiori- Ponte, Roma , Lazio',
+				'Attico Luminoso Deluxe IN FRONT Quirinale',
+				'Intero appartamento affittato da Mauro',
+				'Tuscan Apt in the heart of Florence',
+				'The Smallest Apartment With The Biggest View',
+				'BLUE STUDIO34 APARTMENTS',
+				'Attico vista mare al centro di Napoli',
+				'Bilocale a due passi dal Centro di Torino',
+				'Nel Cuore del Barocco Leccese',
+			],
 			'description' => [
 				'Marco e Laura B & BConfortevoli e accoglienti, tutte con servizi privati e situate al piano terra e al secondo piano.La struttura è composta da diverse stanze, tra cui camere doppie e singole (con letto aggiunto).Il B & B ha due ingressi, uno da Via Aurelia (vicino alle mura vaticane), l\'altro da Via Innocenzo XIII.Tutte le camere sono dotate di asciugacapelli, aria condizionata e riscaldamento e tv. Tutte le camere sono dotate di bagno privato con doccia, parete TV al plasma, asciugacapelli e aria condizionata e riscaldamento. Una di queste camere ha un balcone.',
 				'Delizioso appartamento nel cuore di Roma, a circa 500mt dal Colosseo e altri principali siti turistici come Via dei Fori Imperiali e Domus Aurea. L\'appartamento si trova al secondo piano in un palazzo silenzioso e tranquillo con ascensore.Facilmente raggiungibile con tutti i mezzi pubblici; autobus, tram e metropolitana (fermata linea B "Colosseo").Presenti diversi ristoranti, pizzerie, bar, supermercati, banche e ufficio postale.Possibilità di offrire culla per bambini gratis.',
@@ -46,73 +46,73 @@ class ApartmentsTableSeeder extends Seeder
 				'Questo nuovissimo appartamento è nel pieno centro di Napoli, a pochi minuti a piedi da tutte le attrazioni turistiche e dai tutti i mezzi pubblici: formato da camera da letto con letto matrimoniale, bagno con doccia e soggiorno con divano letto per 2.L\'appartamento è al quinto piano, non esiste ascensore.una perfetta base per visitare la città, esplorare le isole e i dintorni grazie alla vicinanza con porto stazione ferroviaria.',
 				'Un luminoso attico vista mare e Vesuvio al centro di Napoli e molto vicino dal lungomare. Un terrazzo 600mq arredato e vista mare Wifi gratis, digitale terrestre sky, aria condizionata, microonde, cucina, macchina del caffè (cialde gratis), asciugamani e lenzuola, shampoo bagnoschiuma ping pong, area relax Il terrazzo privato ampio ed usato come solarium, ha vista sul mare e Vesuvio, circondato dal silenzio e diventa un posto ideale per cenare la sera in compagnia o godersi un piacevole colazione avvolto dal sole della citta',
 				'Bilocale in stabile d\'epoca stile Liberty in quartiere San Donato, a due passi dal Centro di Torino, servito da tutti i mezzi pubblici. A 5 minuti a piedi dalla fermata Bernini della Metropolitana e a 10 minuti da piazza Statuto.Sito al 4° piano senza ascensore dispone di: letto matrimoniale su soppalco calpestabile, ampia scrivania, zona giorno con divano letto per un adulto o due bambini, cucina completa, televisore con lettore Dvd e bagno attrezzato con tutti i servizi. Colazione inclusa.',
-				'Abitazione si trova di fronte la bellissima Villa Reale (con vista dal balcone), tra Porta Rudie e porta Napoli 2 tra le principali vie d\'accesso al centro storico e a soli 5 min dal Duomo di Lecce, dalla chiesa di Santa Croce e dai più famosi monumenti storici della città . Casa indipendente e di recente ristrutturazione. Nonostante si trovi alle porte del centro storico, è assicurata la privacy e la tranquillità.Facilmente raggiungibile per chi arriva in macchina da Brindisi e a 5 min a piedi dalla fermata del bus-navetta che collega la città con l\'aereoporto.'
-		],
+				'Abitazione si trova di fronte la bellissima Villa Reale (con vista dal balcone), tra Porta Rudie e porta Napoli 2 tra le principali vie d\'accesso al centro storico e a soli 5 min dal Duomo di Lecce, dalla chiesa di Santa Croce e dai più famosi monumenti storici della città . Casa indipendente e di recente ristrutturazione. Nonostante si trovi alle porte del centro storico, è assicurata la privacy e la tranquillità.Facilmente raggiungibile per chi arriva in macchina da Brindisi e a 5 min a piedi dalla fermata del bus-navetta che collega la città con l\'aereoporto.',
+			],
 			'address' => [
-					'Via Orazio, 77- Roma',
-					'Piazza del Colosseo-Roma',
-					'Rione Monti-Roma',
-					'Viale Castro Pretorio, 23-Roma',
-					'Viale Giulio Cesare, 47-Roma',
-					'Via del Quirinale-Roma',
-					'Via Senato, 10- Milano',
-					'Via Monte Napoleone-Milano',
-					'Piazza della Liberta, 20-Firenze',
-					'Via dell\' Oriuolo, 25, Firenze,',
-					'Via Marina, 120, Napoli',
-					'Via Mergellina, 103, Napoli',
-					'Corso Inghilterra, 70, Torino',
-					'Via Principi di Savoia, 3, Lecce'
-				],
+				'Via Orazio, 10- Roma',
+				'Piazza del Colosseo-Roma',
+				'Rione Monti-Roma',
+				'Viale Castro Pretorio, 5-Roma',
+				'Viale Giulio Cesare, 47-Roma',
+				'Via del Quirinale-Roma',
+				'Via Senato, 10- Milano',
+				'Via Monte Napoleone-Milano',
+				'Piazza della Liberta, 20-Firenze',
+				'Via dell\' Oriuolo, 25, Firenze,',
+				'Via Nuova Marina, 120, Napoli',
+				'Via Mergellina, 1, Napoli',
+				'Corso Inghilterra, 35, Torino',
+				'Via Principi di Savoia, 3, Lecce',
+			],
 			'cover_img' => [
-					'images/seed/001.jpeg',
-					'images/seed/002.jpeg',
-					'images/seed/003.jpeg',
-					'images/seed/004.jpeg',
-					'images/seed/005.jpeg',
-					'images/seed/006.jpeg',
-					'images/seed/007.jpeg',
-					'images/seed/008.jpeg',
-					'images/seed/009.jpeg',
-					'images/seed/010.jpeg',
-					'images/seed/011.jpeg',
-					'images/seed/012.jpeg',
-					'images/seed/013.jpeg'
+				'storage/images/seed/001.jpeg',
+				'storage/images/seed/002.jpeg',
+				'storage/images/seed/003.jpeg',
+				'storage/images/seed/004.jpeg',
+				'storage/images/seed/005.jpeg',
+				'storage/images/seed/006.jpeg',
+				'storage/images/seed/007.jpeg',
+				'storage/images/seed/008.jpeg',
+				'storage/images/seed/009.jpeg',
+				'storage/images/seed/010.jpeg',
+				'storage/images/seed/011.jpeg',
+				'storage/images/seed/012.jpeg',
+				'storage/images/seed/013.jpeg',
 			],
 			'latitude' => [
-				'41.8695803',
-				'41.8909472',
-				'41.8922736',
-				'41.9057008',
-				'41.9107923',
-				'41.9007068',
-				'45.4703534',
-				'45.4695698',
-				'43.7841659',
-				'43.7719263',
-				'40.8489832',
-				'40.823634',
-				'45.0731998',
-				'40.356313'
+				'41.90723',
+				'41.88945',
+				'41.89485',
+				'41.90152',
+				'41.911',
+				'41.90175',
+				'45.47007',
+				'45.46817',
+				'43.7835',
+				'43.77219',
+				'40.84606',
+				'40.82361',
+				'45.07416',
+				'40.35628',
 			],
 			'longitude' => [
-				'12.6253393',
-				'12.4908501',
-				'12.4852967',
-				'12.503489',
-				'12.4632328',
-				'12.4867446',
-				'9.1966262',
-				'9.1916397',
-				'11.2602157',
-				'11.2588251',
-				'14.2667012',
-				'14.2169613',
-				'7.6655062',
-				'18.1668176'
-			]
+				'12.46627',
+				'12.49255',
+				'12.49338',
+				'12.50566',
+				'12.46544',
+				'12.49044',
+				'9.19813',
+				'9.19531',
+				'11.26274',
+				'11.25991',
+				'14.26417',
+				'14.219',
+				'7.6664',
+				'18.16901',
+			],
 		];
-		for ($i=0; $i < 13; $i++) {
+		for ($i = 0; $i < 13; $i++) {
 			$apartment = new Apartment;
 			$apartment->user_id = User::inRandomOrder()->first()->id;
 			$apartment->title = $apartmentTemplate['title'][$i];
@@ -127,13 +127,10 @@ class ApartmentsTableSeeder extends Seeder
 			$apartment->cover_img = $apartmentTemplate['cover_img'][$i];
 			$apartment->active = 1;
 			$apartment->save();
-
 			$services = Service::all();
-
-			for ($x=0; $x < rand(0, 11); $x++) {
+			for ($x = 0; $x < rand(0, 11); $x++) {
 				unset($services[rand(1, count($services))]);
 			}
-
 			$apartment->services()->attach($services);
 		}
 	}

@@ -26,7 +26,7 @@
     <div class="card-deck col-md-4 mb-4">
         <div class="card">
             <div class="imgdiv">
-                <a href="{{route("apartment.show", $apartment)}}" class="stretched-link"><img class="image_home" src="{{asset('storage/' . $apartment->cover_img)}}" class="card-img-top" alt="{{$apartment->title}}"></a>
+                <a href="{{route("apartment.show", $apartment)}}" class="stretched-link"><img class="image_home" src="{{asset($apartment->cover_img)}}" class="card-img-top" alt="{{$apartment->title}}"></a>
             </div>
 
             <div class="card-body">
