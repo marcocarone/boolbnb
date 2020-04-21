@@ -28,7 +28,7 @@ $(document).ready(function() {
 						'language': "it-IT",
 						'idxSet': "Geo,Str,PAD",
 						'entityType': "CountrySubdivision,Municipality",
-						'key': "hybTDScBzqzH9mWgKjU0mSeOf7eDO4AV"
+						'key': "MWVEigyGPAZjHyTOtDdAT88VGn5lldaS"
 					},
 					success: function(response) {
 						var suggestions = [];
@@ -68,6 +68,66 @@ $(document).ready(function() {
 		$("#ricerca").addClass("btn-outline-secondary");
 		$("#ricerca").removeClass("btn-success");
 	});
+	//////////////////////////////////////////////
+	// filtri
+	// cambio il valore del contatore stanze
+	$('#rooms_counter').on("click", function (e) {
+		var rooms_counter = parseInt($('#rooms_number').text());
+		if ($(e.target).hasClass("rooms_minus")) {
+			$(".rooms_plus").prop('disabled', false);
+			if (rooms_counter > 1) {
+				$('#rooms_number').text(rooms_counter - 1);
+			}
+			if (rooms_counter <= 2) {
+				$(".rooms_minus").prop('disabled', true);
+			}
+			apiCallFilter(ttMap);
+		}
+		///////////////////////
+		if ($(e.target).hasClass("rooms_plus")) {
+			$(".rooms_minus").prop('disabled', false);
+			if (rooms_counter < 12) {
+				$('#rooms_number').text(rooms_counter + 1);
+			}
+			if (rooms_counter >= 11) {
+				$(".rooms_plus").prop('disabled', true);
+			}
+			apiCallFilter(ttMap);
+		}
+	});
+	// cambio il valore del contatore bagni
+	$('#baths_number').on("click", function (e) {
+		var baths_counter = parseInt($('#baths_counter').text());
+		if ($(e.target).hasClass("baths_minus")) {
+			$(".baths_plus").prop('disabled', false);
+			if (baths_counter > 1) {
+				$('#baths_counter').text(baths_counter - 1);
+			}
+			if (baths_counter <= 2) {
+				$(".baths_minus").prop('disabled', true);
+			}
+			apiCallFilter(ttMap);
+		}
+		///////////////////////
+		if ($(e.target).hasClass("baths_plus")) {
+			$(".baths_minus").prop('disabled', false);
+			if (baths_counter < 3) {
+				$('#baths_counter').text(baths_counter + 1);
+			}
+			if (baths_counter >= 2) {
+				$(".baths_plus").prop('disabled', true);
+			}
+			apiCallFilter(ttMap);
+		}
+	});
+	// scrivo il raggio nel contatore
+	$("#distance").change(function () {
+		$('#distance-value').text($(this).val());
+	});
+	$(".change-filter").change(function () {
+		apiCallFilter(ttMap);
+	});
+	/////////////////////////////////////////
 	// cambio icona marker per app in hover
 	$(".apartment").on({
 		mouseenter: function () {
@@ -79,42 +139,13 @@ $(document).ready(function() {
 			$('.markerHome[data-id="' + thisId + '"]').removeClass('selected-marker');
 		}
 	});
-	// filtro dei servizi
-	$(".checkbox").change(function() {
-		var services_array = $("input[type=checkbox]:checked.checkbox").map(function() {return $(this).val()}).get();
-		$.ajax({
-			url: "api/filtered",
-			method: "POST",
-			data: { 'services': services_array, 'centerLongLat': [$("#map").data("lon"), $("#map").data("lat")]},
-			dataType: "json",
-			success: function (data, message, xhr) {
-				console.log(data);
-				if (xhr.status == 200) {
-					$("#apartments").empty();
-					$("div.messageResult").empty();
-					var template = Handlebars.compile($("#entry-template").html());
-					for (let index = 0; index < data.results.length; index++) {
-						$("#apartments").append(template(data.results[index]));
-					}
-					generateMarker(ttMap);
-					if (!data.results.length) {
-						$(".messageResult").append('<h2>La ricerca non ha prodotto risultati</h2>');
-					}
-				} else {
-					$(".messageResult").append('<h2>Errore server APi</h2>');
-				}
-			},
-			error: function() {
-				$(".messageResult").append('<h2>Impossibile effettuare la richiesta</h2>');
-			}
-		});
-	});
+	//////////////////////////////////////
 });
 
 function generateTomTomMap() {
 	var map = tt.map({
 		container: 'map',
-		key: 'hybTDScBzqzH9mWgKjU0mSeOf7eDO4AV',
+		key: 'MWVEigyGPAZjHyTOtDdAT88VGn5lldaS',
 		style: 'tomtom://vector/1/basic-main',
 		center: [$("#map").attr("data-lon"), $("#map").attr("data-lat")],
 		zoom: 11
@@ -169,6 +200,45 @@ function generateMarker(map) {
 				"'></div></a>";
 			var popup = new tt.Popup({ offset: popupOffsets }).setHTML(htmlApt);
 			marker.setPopup(popup);
+		}
+	});
+}
+
+function apiCallFilter(map) {
+	var services_filter = $("input[type=checkbox]:checked.checkbox").map(function () { return $(this).val() }).get();
+	var distance_filter = parseInt($("#distance").val());
+	var baths_counter = parseInt($('#baths_counter').text());
+	var rooms_counter = parseInt($('#rooms_number').text());
+	$.ajax({
+		url: "api/filtered",
+		method: "POST",
+		data: { 
+			'services': services_filter, 
+			'baths': baths_counter,
+			'rooms': rooms_counter,
+			'distance': distance_filter,
+			'centerLongLat': [$("#map").data("lon"), $("#map").data("lat")],
+		},
+		dataType: "json",
+		success: function (data, message, xhr) {
+			console.log(data);
+			if (xhr.status == 200) {
+				$("#apartments").empty();
+				$("div.messageResult").empty();
+				var template = Handlebars.compile($("#entry-template").html());
+				for (let index = 0; index < data.results.length; index++) {
+					$("#apartments").append(template(data.results[index]));
+				}
+				generateMarker(map);
+				if (!data.results.length) {
+					$(".messageResult").append('<h2>La ricerca non ha prodotto risultati</h2>');
+				}
+			} else {
+				$(".messageResult").append('<h2>Errore server APi</h2>');
+			}
+		},
+		error: function () {
+			$(".messageResult").append('<h2>Impossibile effettuare la richiesta</h2>');
 		}
 	});
 }

@@ -133,10 +133,14 @@ class ApartmentController extends Controller
 	public function edit(Apartment $apartment)
 	{
 
+		$idUser = Auth::user()->id;
 		if (empty($apartment)) {
-			abort('404');
+			abort(401);
 		}
 
+		if ($apartment->user->id != $idUser) {
+			abort(401);
+		}
 
 		$services = Service::all();
 		$data = [
@@ -164,11 +168,11 @@ class ApartmentController extends Controller
 
 		$idUser = Auth::user()->id;
 		if (empty($apartment)) {
-			abort(404);
+			abort(401);
 		}
 
 		if ($apartment->user->id != $idUser) {
-			abort(404);
+			abort(401);
 		}
 
 		$request->validate([
@@ -194,7 +198,7 @@ class ApartmentController extends Controller
 		$apartment->active = $data['active'];
 		$apartment->price = $data['price'];
 
-		$apartment->cover_img = $path;
+		$apartment->cover_img = 'storage/' . $path;
 
 		$updated = $apartment->update();
 

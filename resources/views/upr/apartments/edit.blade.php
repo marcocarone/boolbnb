@@ -73,8 +73,8 @@
                   <div class="dropdown-address hidden">
                     <ul class="list-unstyled m-0"></ul>
                   </div>
-                  <input type="hidden" id="latitude" name="latitude" value="">
-                  <input type="hidden" id="longitude" name="longitude" value="">
+                  <input type="hidden" id="latitude" name="latitude" value="{{$apartment->latitude}}">
+                  <input type="hidden" id="longitude" name="longitude" value="{{$apartment->longitude}}">
             </div>
           
             <div class="form-group col-md-3">

@@ -93,9 +93,6 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-}
-
-.btn-counter .btn-circle span {
 	font-family: 'Fira Sans', sans-serif;
 	line-height: 20px;
 	font-size: 30px;
@@ -111,4 +108,10 @@
 	border: 1px solid grey;
 	width: 30px;
 	height: 30px;
+}
+
+.span_number_counter {
+	display: inline-block;
+	min-width: 18px;
+	text-align: center;
 }

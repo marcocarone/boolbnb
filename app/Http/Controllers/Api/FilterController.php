@@ -14,33 +14,75 @@ class FilterController extends Controller
 
 	public function Filter(Request $request)
 	{
-		if (!$request->has('centerLongLat') || count($request['centerLongLat']) < 2) {
-			return response()->json([
-				'message' => "Missing paramenter!",
-				], 400);
+
+		if (!$request->has('centerLongLat') || count($request['centerLongLat']) != 2) {
+			return response()->json(['message' => "Missing or invalid centerLongLat paramenter!",], 400);
 		}
 
-		if ($request->has('services') && count($request['services']) > 0) {
+		if (!$request->has('distance')) {
+			return response()->json(['message' => "Missing distance paramenter!"], 400);
+		} else if ($request['distance'] < 20 || $request['distance'] > 100) {
+			return response()->json(['message' => "Distance paramenter not valid!"], 400);
+		}
+
+		if (!$request->has('baths')) {
+			return response()->json(['message' => "Missing baths paramenter!"], 400);
+		} else if ($request['baths'] < 1 || $request['baths'] > 3) {
+			return response()->json(['message' => "Baths paramenter not valid!"], 400);
+		}
+
+		if (!$request->has('rooms')) {
+			return response()->json(['message' => "Missing rooms paramenter!"], 400);
+		} else if ($request['rooms'] < 1 || $request['rooms'] > 12) {
+			return response()->json(['message' => "Rooms paramenter not valid!"], 400);
+		}
+
+		$apartamentsFiltered = Apartment::where('active', '1');
+
+		if ($request->has('services')) {
 			$services = $request['services'];
-			$apartamentsFiltered = Apartment::whereHas('services', function ($query) use ($services) {
+			$apartamentsFiltered = $apartamentsFiltered->whereHas('services', function ($query) use ($services) {
 				$query->whereIn('services.id', $services);
-			}, '=', count($services))->get();
+			}, '=', count($services));
 		}
 
-		if (!isset($apartamentsFiltered)) {
-			$apartamentsFiltered = Apartment::where('active', '1')->get();
-		}
-
+		$distance = $request['distance'];
 		$apartmentsInRadius = [];
-		foreach ($apartamentsFiltered as $apartment) {
+		foreach ($apartamentsFiltered->get() as $apartment) {
 			$km = $this->CalcDistance($request['centerLongLat'][1], $request['centerLongLat'][0], $apartment->latitude, $apartment->longitude);
-			if ($km <= 20) {
+			if ($km <= $distance) {
 				$apartmentsInRadius[] = $apartment;
 			}
 		}
 
+		$apartamentsFiltered = $apartmentsInRadius;
+
+		if ($request->has('rooms')) {
+			$apartmentsRooms = [];
+			$rooms = $request['rooms'];
+			foreach ($apartamentsFiltered as $apartment) {
+				if ($apartment->n_rooms >= $rooms) {
+					$apartmentsRooms[] = $apartment;
+				}
+			}
+		}
+
+		$apartamentsFiltered = $apartmentsRooms;
+
+		if ($request->has('baths')) {
+			$apartmentsBaths = [];
+			$baths = $request['baths'];
+			foreach ($apartamentsFiltered as $apartment) {
+				if ($apartment->n_baths >= $baths) {
+					$apartmentsBaths[] = $apartment;
+				}
+			}
+		}
+
+		$apartamentsFiltered = $apartmentsBaths;
+
 		return response()->json([
-			'results' => $apartmentsInRadius,
+			'results' => $apartamentsFiltered,
 			], 200);
 	}
 }

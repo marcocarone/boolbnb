@@ -20,42 +20,36 @@
 			<button id="ricerca" class="btn btn-outline-secondary" type="submit" disabled id="button-addon2">Ricerca</button>
 		</div>
 	</form>
-	<div class="form-group col-md-12 d-flex justify-content-between services">
+	<div class="filter_box">
+		<div class="form-group col-md-12 d-flex justify-content-between services">
 		<label for="services">Servizi Aggiuntivi</label>
 		@foreach ($services as $service)
 			<div class="m-1">
-				<input class="checkbox" type="checkbox" name="checkbox" value="{{$service->id}}">
+				<input class="checkbox change-filter" type="checkbox" name="checkbox" value="{{$service->id}}">
 				<span>{{$service->title}}</span>
 			</div>
 		@endforeach
-	</div>
-	<div class="form-group col-md-12 d-flex justify-content-center">
-		<div class="flex-grow-1">
-			<label for="distance">Raggio di ricerca (Km) - </label>
-			<span><strong>100</strong></span>
-			<input type="range" class="custom-range"  value ="20" min="20" max="100" step="1" id="distance">
 		</div>
-	</div>
-	<div class="form-group col-md-12 d-flex justify-content-center align-items-center">
-		<p class="mb-0 mr-4">Numero di stanze:</p>
-		<div class="btn-counter d-flex justify-content-center align-items-center">
-			<button class="btn btn-circle">
-				<span>-</span>
-			</button>
-			<span><strong>0</strong></span>
-			<button class="btn btn-circle">
-				<span>+</span>
-			</button>
+		<div class="form-group col-md-12 d-flex justify-content-center">
+			<div class="flex-grow-1">
+				<label for="distance">Raggio di ricerca (Km) - </label>
+				<span><strong id="distance-value">20</strong></span>
+				<input type="range" class="custom-range change-filter" min="20" max="100" step="5" value="20" id="distance">
+			</div>
 		</div>
-		<p class="mb-0 mr-4 ml-5">Numero di bagni:</p>
-		<div class="btn-counter d-flex justify-content-center align-items-center">
-			<button class="btn btn-circle">
-				<span>-</span>
-			</button>
-			<span><strong>0</strong></span>
-			<button class="btn btn-circle">
-				<span>+</span>
-			</button>
+		<div class="form-group col-md-12 d-flex justify-content-center align-items-center">
+			<p class="mb-0 mr-4">Numero minimo di stanze:</p>
+			<div id="rooms_counter" class="btn-counter d-flex justify-content-center align-items-center">
+				<button class="btn btn-circle rooms_minus" disabled>-</button>
+				<span class="span_number_counter"><strong id="rooms_number">1</strong></span>
+				<button class="btn btn-circle rooms_plus">+</button>
+			</div>
+			<p class="mb-0 mr-4 ml-5">Numero minimo di bagni:</p>
+			<div id="baths_number" class="btn-counter d-flex justify-content-center align-items-center">
+				<button class="btn btn-circle baths_minus" disabled>-</button>
+				<span class="span_number_counter"><strong id="baths_counter">1</strong></span>
+				<button class="btn btn-circle baths_plus">+</button>
+			</div>
 		</div>
 	</div>
 	<div class="d-flex justify-content-center messageResult"></div>
