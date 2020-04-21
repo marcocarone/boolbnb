@@ -27,8 +27,9 @@ class ApartmentController extends Controller
 	public function show(Apartment $apartment)
 	{
 		if (empty($apartment)) {
-			abort('404');
+			abort(400);
 		}
+
 		// $apartment->views += 1;
 		// $apartment->update();
 		return view('show', compact('apartment'));

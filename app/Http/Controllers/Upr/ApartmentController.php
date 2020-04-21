@@ -102,8 +102,11 @@ class ApartmentController extends Controller
 		if (empty($apartment)) {
 			abort('404');
 		}
-		// $apartment->views += 1;
-		// $apartment->update();
+
+		$idUser = Auth::user()->id;
+		if ($apartment->user->id != $idUser) {
+			return redirect()->route('apartment.show', $apartment);
+		}
 
 		return view('upr.apartments.show', compact('apartment'));
 	}
@@ -112,6 +115,11 @@ class ApartmentController extends Controller
 	{
 		if (empty($apartment)) {
 			abort('404');
+		}
+
+		$idUser = Auth::user()->id;
+		if ($apartment->user->id != $idUser) {
+			return redirect()->route('apartment.show', $apartment);
 		}
 
 		$images = Image::all();
@@ -135,7 +143,7 @@ class ApartmentController extends Controller
 
 		$idUser = Auth::user()->id;
 		if (empty($apartment)) {
-			abort(401);
+			abort(400);
 		}
 
 		if ($apartment->user->id != $idUser) {
@@ -168,7 +176,7 @@ class ApartmentController extends Controller
 
 		$idUser = Auth::user()->id;
 		if (empty($apartment)) {
-			abort(401);
+			abort(400);
 		}
 
 		if ($apartment->user->id != $idUser) {
@@ -221,6 +229,14 @@ class ApartmentController extends Controller
 	 */
 	public function destroy(Apartment $apartment)
 	{
+		$idUser = Auth::user()->id;
+		if (empty($apartment)) {
+			abort(400);
+		}
+
+		if ($apartment->user->id != $idUser) {
+			abort(401);
+		}
 		$apartment->services()->detach();
 		$apartment->delete();
 		return redirect()->route('upr.apartments.index');
