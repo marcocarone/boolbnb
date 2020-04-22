@@ -1,4 +1,5 @@
 require("./bootstrap");
+const turf = require('@turf/turf');
 const Handlebars = require("handlebars");
 
 $(document).ready(function() {
@@ -123,6 +124,7 @@ $(document).ready(function() {
 	// scrivo il raggio nel contatore
 	$("#distance").change(function () {
 		$('#distance-value').text($(this).val());
+		generateCircleRadius(ttMap);
 	});
 	$(".change-filter").change(function () {
 		apiCallFilter(ttMap);
@@ -143,15 +145,18 @@ $(document).ready(function() {
 });
 
 function generateTomTomMap() {
+	var centerLat = parseFloat($("#map").attr("data-lat"));
+	var centerLon = parseFloat($("#map").attr("data-lon"));
 	var map = tt.map({
 		container: 'map',
 		key: 'MWVEigyGPAZjHyTOtDdAT88VGn5lldaS',
 		style: 'tomtom://vector/1/basic-main',
-		center: [$("#map").attr("data-lon"), $("#map").attr("data-lat")],
+		center: [centerLon, centerLat],
 		zoom: 11
 	});
 	map.addControl(new tt.FullscreenControl());
 	map.addControl(new tt.NavigationControl());
+	generateCircleRadius(map);
 	return map;
 }
 
@@ -205,6 +210,8 @@ function generateMarker(map) {
 }
 
 function apiCallFilter(map) {
+	var centerLat = parseFloat($("#map").attr("data-lat"));
+	var centerLon = parseFloat($("#map").attr("data-lon"));
 	var services_filter = $("input[type=checkbox]:checked.checkbox").map(function () { return $(this).val() }).get();
 	var distance_filter = parseInt($("#distance").val());
 	var baths_counter = parseInt($('#baths_counter').text());
@@ -217,7 +224,7 @@ function apiCallFilter(map) {
 			'baths': baths_counter,
 			'rooms': rooms_counter,
 			'distance': distance_filter,
-			'centerLongLat': [$("#map").data("lon"), $("#map").data("lat")],
+			'centerLongLat': [centerLon, centerLat],
 		},
 		dataType: "json",
 		success: function (data, message, xhr) {
@@ -240,5 +247,41 @@ function apiCallFilter(map) {
 		error: function () {
 			$(".messageResult").append('<h2>Impossibile effettuare la richiesta</h2>');
 		}
+	});
+}
+
+function generateCircleRadius(map) {
+	var centerLat = parseFloat($("#map").attr("data-lat"));
+	var centerLon = parseFloat($("#map").attr("data-lon"));
+	var radius = parseInt($('#distance-value').text());
+	//cal per raggio a 128 punti
+	var rad = 3.141593;
+	var radLat = radius / 111.1896;
+	var radLon = radius / 82.633;
+	var coordinates = [];
+	for (let index = 0; index < 128; index++) {
+		coordinates.push([centerLon + radLon * Math.cos(rad * index / 64), centerLat + radLat * Math.sin(rad * index / 64)])
+	}
+	map.on('load', function () {
+		map.addLayer({
+			'id': 'overlay',
+			'type': 'fill',
+			'source': {
+				'type': 'geojson',
+				'data': {
+					'type': 'Feature',
+					'geometry': {
+						'type': 'Polygon',
+						'coordinates': [coordinates]
+					}
+				}
+			},
+			'layout': {},
+			'paint': {
+				'fill-color': '#db356c',
+				'fill-opacity': 0.2,
+				'fill-outline-color': 'black'
+			}
+		});
 	});
 }
