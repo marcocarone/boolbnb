@@ -42157,6 +42157,7 @@ $(document).ready(function () {
   } ////////
 
 
+  idCircle;
   var oldquery;
   $("#address").keyup(function (event) {
     var query = event.target.value;
@@ -42284,10 +42285,11 @@ $(document).ready(function () {
 
       apiCallFilter(ttMap);
     }
-  }); // scrivo il raggio nel contatore
+  }); // scrivo il raggio nel contatore e aggiorno la mappa
 
   $("#distance").change(function () {
     $('#distance-value').text($(this).val());
+    ttMap.removeLayer(idCircle);
     generateCircleRadius(ttMap);
   });
   $(".change-filter").change(function () {
@@ -42396,8 +42398,6 @@ function apiCallFilter(map) {
     },
     dataType: "json",
     success: function success(data, message, xhr) {
-      console.log(data);
-
       if (xhr.status == 200) {
         $("#apartments").empty();
         $("div.messageResult").empty();
@@ -42427,18 +42427,20 @@ function generateCircleRadius(map) {
   var centerLon = parseFloat($("#map").attr("data-lon"));
   var radius = parseInt($('#distance-value').text()); //cal per raggio a 128 punti
 
-  var rad = 3.141593;
+  var rad = 3.14159265359;
   var radLat = radius / 111.1896;
   var radLon = radius / 82.633;
   var coordinates = [];
+  idCircleTemp = Date.now().toString();
+  idCircle = idCircleTemp;
 
   for (var index = 0; index < 128; index++) {
     coordinates.push([centerLon + radLon * Math.cos(rad * index / 64), centerLat + radLat * Math.sin(rad * index / 64)]);
   }
 
-  map.on('load', function () {
+  map.once('idle', function () {
     map.addLayer({
-      'id': 'overlay',
+      'id': idCircle,
       'type': 'fill',
       'source': {
         'type': 'geojson',
@@ -42454,7 +42456,7 @@ function generateCircleRadius(map) {
       'paint': {
         'fill-color': '#db356c',
         'fill-opacity': 0.2,
-        'fill-outline-color': 'black'
+        'fill-outline-color': '#db356c'
       }
     });
   });
