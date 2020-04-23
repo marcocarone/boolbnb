@@ -25,6 +25,7 @@ Route::post('/guest/messages', 'MessageController@store')->name('guest.message.s
 
 Auth::routes();
 
+
 Route::name('upr.')->prefix('upr')->namespace('Upr')->middleware('auth')->group(function () {
     Route::get('/dashboard', 'HomeController@index')->name('dashboard');
     Route::resource('apartments', 'ApartmentController');
@@ -32,5 +33,6 @@ Route::name('upr.')->prefix('upr')->namespace('Upr')->middleware('auth')->group(
     Route::resource('images', 'ImageController');
     Route::post('delete', 'ImageController@deleteImage');
     Route::resource('message', 'MessageController');
-
+    Route::post('payment/{apartment}', 'PaymentController@process')->name('payment.process');
+    Route::post('payment/confirmation/{apartment}', 'PaymentController@confirmation')->name('payment.confirmation');
 });

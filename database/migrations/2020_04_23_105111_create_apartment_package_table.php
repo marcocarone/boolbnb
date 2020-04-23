@@ -19,12 +19,16 @@ class CreateApartmentPackageTable extends Migration
 			$table->unsignedBigInteger('apartment_id');
 			$table->foreign('apartment_id')
 				->references('id')
-				->on('apartments');
+				->on('apartments')
+				->onUpdate('CASCADE')
+				->onDelete('CASCADE');
 
 			$table->unsignedBigInteger('package_id');
 			$table->foreign('package_id')
 				->references('id')
-				->on('packages');
+				->on('packages')
+				->onUpdate('CASCADE')
+				->onDelete('CASCADE');
 
 			$table->datetime('start');
 			$table->datetime('end');

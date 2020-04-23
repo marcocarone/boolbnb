@@ -5,7 +5,6 @@ use App\Apartment;
 use App\Package;
 use App\ApartmentPackage;
 use Carbon\Carbon;
-use Faker\Generator as Faker;
 
 class ApartmentsPackagesTableSeeder extends Seeder
 {
@@ -14,7 +13,7 @@ class ApartmentsPackagesTableSeeder extends Seeder
 	 *
 	 * @return void
 	 */
-	public function run(Faker $faker)
+	public function run()
 	{
 		$apartments = Apartment::inRandomOrder()->get();
 
@@ -23,9 +22,9 @@ class ApartmentsPackagesTableSeeder extends Seeder
 			$sponsor->apartment_id = $apartments[$i]['id'];
 			$sponsor->package_id = Package::inRandomOrder()->first()->id;
 			$sponsor->start = Carbon::now()->subMinutes(rand(1, 4320));
-			$sponsor->end = $sponsor->start->addHours(Package::find($sponsor->package_id)->duration);
+			$sponsor->end = Carbon::parse($sponsor->start)->addHours(Package::find($sponsor->package_id)->duration);
 			$sponsor->created_at = $sponsor->start;
-			$sponsor->transaction_id = $faker->password;
+			$sponsor->transaction_id = bin2hex(openssl_random_pseudo_bytes(4));
 			$sponsor->save();
 		}
 		
