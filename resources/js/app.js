@@ -1,5 +1,4 @@
 require("./bootstrap");
-const turf = require('@turf/turf');
 const Handlebars = require("handlebars");
 
 $(document).ready(function() {
@@ -239,13 +238,16 @@ function apiCallFilter(map) {
 				}
 				generateMarker(map);
 				if (!data.results.length) {
+					$("div.messageResult").empty();
 					$(".messageResult").append('<h2>La ricerca non ha prodotto risultati</h2>');
 				}
 			} else {
+				$("div.messageResult").empty();
 				$(".messageResult").append('<h2>Errore server APi</h2>');
 			}
 		},
 		error: function () {
+			$("div.messageResult").empty();
 			$(".messageResult").append('<h2>Impossibile effettuare la richiesta</h2>');
 		}
 	});
@@ -267,7 +269,7 @@ function generateCircleRadius(map) {
 	}
 	map.once('idle', function () {
 		map.addLayer({
-			'id': idCircle,
+			'id': idCircleTemp,
 			'type': 'fill',
 			'source': {
 				'type': 'geojson',

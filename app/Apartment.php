@@ -28,22 +28,27 @@ class Apartment extends Model
 		}
 
 		public function services()
-	{
-		return $this->belongsToMany('App\Service', "apartment_service");
-	}
+		{
+			return $this->belongsToMany('App\Service', "apartment_service");
+		}
 
-	public function images()
-	{
-		return $this->hasMany('App\Image');
-	}
+		public function images()
+		{
+			return $this->hasMany('App\Image');
+		}
 
-	public function messages()
-	{
-		return $this->hasMany('App\Message');
-	}
+		public function messages()
+		{
+			return $this->hasMany('App\Message');
+		}
 
-	public function getShowRouteAttribute()
-	{
-		return route('apartment.show', $this->id);
-	}
+		public function getShowRouteAttribute()
+		{
+			return route('apartment.show', $this->id);
+		}
+
+		public function packages()
+		{
+		return $this->belongsToMany('App\Package', "apartment_package");
+		}
 }
