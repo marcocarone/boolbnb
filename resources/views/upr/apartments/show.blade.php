@@ -2,16 +2,17 @@
 
 @section('content')
 {{-- messaggio di conferma per la transazione --}}
-<div class="container mt-5">
-	<div class="row">
-		<div class="col-xl-12">
-			<div class="alert alert-success">
-				<p>{{$message}}</p>
+@if (!empty($message)) 
+	<div class="container mt-5">
+		<div class="row">
+			<div class="col-xl-12">
+				<div class="alert alert-success">
+					<p>{{$message}}</p>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
-
+@endIf
 <div class="container">
 	<div class="d-flex justify-content-between">
 		<a class="btn btn-secondary mb-3" href="{{route("upr.apartments.index")}}">Indietro</a>
@@ -83,7 +84,7 @@
 			</div>
 		</div>
 	</div>
-	<div id="map"  class='map card m-2 col-md-12' data-lat="{{$apartment->latitude}}" data-lon="{{$apartment->longitude}}"></div>
+	<div id="map" class='map card m-2 col-md-12' data-lat="{{$apartment->latitude}}" data-lon="{{$apartment->longitude}}"></div>
 </div>
 
 @endsection
