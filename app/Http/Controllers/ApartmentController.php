@@ -24,8 +24,8 @@ class ApartmentController extends Controller
 				$sponsoredApartments[] = $apartmentpkg->apartment_id;
 			}
 		}
-		$advApt = Apartment::where('active', '1')->whereIn('id', $sponsoredApartments)->get();
-		$noAdvApt = Apartment::where('active', '1')->whereNotIn('id', $sponsoredApartments)->get();
+		$advApt = Apartment::where('active', '1')->whereIn('id', $sponsoredApartments)->latest()->get();
+		$noAdvApt = Apartment::where('active', '1')->whereNotIn('id', $sponsoredApartments)->latest()->get();
 		$data = ['advApt' => $advApt, 'noAdvApt' => $noAdvApt];
 		return view('home', $data);
 	}
