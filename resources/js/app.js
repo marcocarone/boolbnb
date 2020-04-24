@@ -264,8 +264,8 @@ function generateCircleRadius(map) {
 	var coordinates = [];
 	idCircleTemp = Date.now().toString();
 	idCircle = idCircleTemp;
-	for (let index = 0; index < 128; index++) {
-		coordinates.push([centerLon + radLon * Math.cos(rad * index / 64), centerLat + radLat * Math.sin(rad * index / 64)])
+	for (let index = 0; index < 512; index++) {
+		coordinates.push([centerLon + radLon * Math.cos(rad * index / 256), centerLat + radLat * Math.sin(rad * index / 256)])
 	}
 	map.once('idle', function () {
 		map.addLayer({

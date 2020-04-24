@@ -55,7 +55,6 @@ class PaymentController extends Controller
 
 		$request->validate([
 			'package_id' => 'numeric|required',
-			'price' => 'numeric|required',
 			'payment_method_nonce' => 'string|required',
 		]);
 
@@ -63,7 +62,7 @@ class PaymentController extends Controller
 
 		$gateway = new Braintree\Gateway($this->braintreeConfig);
 		$result = $gateway->transaction()->sale([
-			'amount' => $data['price'],
+			'amount' => Package::find($data['package_id'])->price,
 			'paymentMethodNonce' => $data['payment_method_nonce'],
 			'customer' => [
 				'firstName' => Auth::user()->name,
@@ -87,8 +86,8 @@ class PaymentController extends Controller
 					$subscription->start = $endOfPrevSub;
 				}
 			}
-			$hours = Package::where('id', $data['package_id'])->first();
-			$subscription->end = Carbon::parse($subscription->start)->addHours($hours->duration);
+			$hours = Package::where('id', $data['package_id'])->first()->duration;
+			$subscription->end = Carbon::parse($subscription->start)->addHours($hours);
 			$subscription->transaction_id = $transaction->id;
 			$subscription->save();
 			$data = [

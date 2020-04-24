@@ -1,6 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
+	@if (session('message'))
+	<div class="container mt-5">
+		<div class="row">
+			<div class="col-xl-12">
+				<div class="alert alert-alert">
+					<p>{{session('message')}}.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	@endif
 	<div class="container mt-5">
 		<div class="row">
 			<div class="col-xl-12">
@@ -13,7 +24,7 @@
 							<strong>Migliora la tua visibilità del tuo annuncio scegliendo fra i seguenti pacchetti:</strong>
 							@foreach ($packages as $package)
 								<div>
-									<input class="radio" type="radio" id="price" name="price" min="1" placeholder="Price" value="{{$package->price}}">
+									<input class="radio" type="radio" id="package_id" name="package_id" min="1" placeholder="package_id" value="{{$package->id}}">
 									<strong>{{$package->name}}: </strong>
 									<span>Questo pacchetto ha una durata di
 									@if ($package->id == 1) 
@@ -22,7 +33,6 @@
 										{{$package->duration / 24}} giorni 
 									@endif
 									per {{$package->price}}&euro;</span> 
-									<input type="hidden" name="package_id" value="{{$package->id}}">
 								</div>
 							@endforeach
 						</div>

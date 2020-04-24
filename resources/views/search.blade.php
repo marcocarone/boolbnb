@@ -34,7 +34,7 @@
 			<div class="flex-grow-1">
 				<label for="distance">Raggio di ricerca (Km) - </label>
 				<span><strong id="distance-value">20</strong></span>
-				<input type="range" class="custom-range change-filter" min="20" max="100" step="1" value="20" id="distance">
+				<input type="range" class="custom-range change-filter" min="20" max="100" step="5" value="20" id="distance">
 			</div>
 		</div>
 		<div class="form-group col-md-12 d-flex justify-content-center align-items-center">

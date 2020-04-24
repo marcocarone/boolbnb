@@ -42423,8 +42423,8 @@ function generateCircleRadius(map) {
   idCircleTemp = Date.now().toString();
   idCircle = idCircleTemp;
 
-  for (var index = 0; index < 128; index++) {
-    coordinates.push([centerLon + radLon * Math.cos(rad * index / 64), centerLat + radLat * Math.sin(rad * index / 64)]);
+  for (var index = 0; index < 512; index++) {
+    coordinates.push([centerLon + radLon * Math.cos(rad * index / 256), centerLat + radLat * Math.sin(rad * index / 256)]);
   }
 
   map.once('idle', function () {
