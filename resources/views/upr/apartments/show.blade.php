@@ -1,10 +1,18 @@
 @extends('layouts.app')
 
 @section('content')
-
+{{-- messaggio di conferma per la transazione --}}
+<div class="container mt-5">
+	<div class="row">
+		<div class="col-xl-12">
+			<div class="alert alert-success">
+				<p>{{$message}}</p>
+			</div>
+		</div>
+	</div>
+</div>
 
 <div class="container">
-
 	<div class="d-flex justify-content-between">
 		<a class="btn btn-secondary mb-3" href="{{route("upr.apartments.index")}}">Indietro</a>
 		<div class="">

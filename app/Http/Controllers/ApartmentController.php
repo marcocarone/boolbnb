@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Apartment;
+use App\ApartmentPackage;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class ApartmentController extends Controller
 {
@@ -14,8 +16,17 @@ class ApartmentController extends Controller
 	 */
 	public function index()
 	{
-		$apartments = Apartment::where('active', '1')->get();
-		return view('home', compact('apartments'));
+		$sponsoredApartments = [];
+		$allApartmentPackage = ApartmentPackage::all();
+		foreach ($allApartmentPackage as $apartmentpkg) {
+			if (Carbon::parse($apartmentpkg->start)->lt(Carbon::now()) && Carbon::parse($apartmentpkg->end)->gt(Carbon::now())) {
+				$sponsoredApartments[] = $apartmentpkg->apartment_id;
+			}
+		}
+		$advApt = Apartment::where('active', '1')->whereIn('id', $sponsoredApartments)->get();
+		$noAdvApt = Apartment::where('active', '1')->whereNotIn('id', $sponsoredApartments)->get();
+		$data = ['advApt' => $advApt, 'noAdvApt' => $noAdvApt];
+		return view('home', $data);
 	}
 
 	/**

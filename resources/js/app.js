@@ -131,7 +131,7 @@ $(document).ready(function() {
 		apiCallFilter(ttMap);
 	});
 	/////////////////////////////////////////
-	// cambio icona marker per app in hover
+	// cambio icona marker per apt in hover
 	$(".apartment").on({
 		mouseenter: function () {
 			var thisId = $(this).data('id');

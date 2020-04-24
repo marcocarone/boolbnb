@@ -42281,7 +42281,7 @@ $(document).ready(function () {
   $(".change-filter").change(function () {
     apiCallFilter(ttMap);
   }); /////////////////////////////////////////
-  // cambio icona marker per app in hover
+  // cambio icona marker per apt in hover
 
   $(".apartment").on({
     mouseenter: function mouseenter() {

@@ -31,7 +31,6 @@
 						<div id="bt-dropin"></div>
 					</div>
 				<input id="nonce" name="payment_method_nonce" type="hidden"/>
-				<input type="hidden" name="apartament_id" value="{{$apartment->id}}">
 				<button class="btn btn-primary" type="submit">Paga</button>
 				</form>
 			<script src="https://js.braintreegateway.com/web/dropin/1.13.0/js/dropin.min.js"></script>

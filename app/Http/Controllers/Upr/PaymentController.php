@@ -45,16 +45,30 @@ class PaymentController extends Controller
 	}
 
 	public function confirmation(Apartment $apartment, Request $request) {
+		if (empty($apartment)) {
+			abort(400);
+		}
+
+		if ($apartment->user->id != Auth::user()->id) {
+			abort(401);
+		}
+
+		$request->validate([
+			'package_id' => 'numeric|required',
+			'price' => 'numeric|required',
+			'payment_method_nonce' => 'string|required',
+		]);
+
 		$data = $request->all();
-		dd($apartment);
+
 		$gateway = new Braintree\Gateway($this->braintreeConfig);
 		$result = $gateway->transaction()->sale([
 			'amount' => $data['price'],
-			'paymentMethodNonce' => $request->payment_method_nonce,
+			'paymentMethodNonce' => $data['payment_method_nonce'],
 			'customer' => [
-				'firstName' => 'Name',
-				'lastName' => 'Surname',
-				'email' => 'test@test.it',
+				'firstName' => Auth::user()->name,
+				'lastName' => Auth::user()->surname,
+				'email' => Auth::user()->email,
 			],
 			'options' => [
 				'submitForSettlement' => true,
@@ -62,16 +76,26 @@ class PaymentController extends Controller
 		]);
 		if ($result->success) {
 			$transaction = $result->transaction;
-			$subscription = new Subscription();
-			$subscription->apartament_id = $data['apartament_id'];
+			$subscription = new ApartmentPackage();
+			$subscription->apartment_id = $apartment->id;
 			$subscription->package_id = $data['package_id'];
-
 			$subscription->start = Carbon::now();
+			if (ApartmentPackage::where('apartment_id', $apartment->id)->latest()->first()) {
+				$checkSubscription = ApartmentPackage::where('apartment_id', $apartment->id)->latest()->first()->end;
+				$endOfPrevSub = Carbon::parse($checkSubscription);
+				if ($endOfPrevSub->gt(Carbon::now())) {
+					$subscription->start = $endOfPrevSub;
+				}
+			}
 			$hours = Package::where('id', $data['package_id'])->first();
-			$subscription->end = Carbon::now()->addHours($hours->duration);
+			$subscription->end = Carbon::parse($subscription->start)->addHours($hours->duration);
+			$subscription->transaction_id = $transaction->id;
 			$subscription->save();
-			$message = 'La transazione con ID: ' . $transaction->id . ' è avvenuta con successo';
-			return view('payments.result', compact('message'));
+			$data = [
+				'message' => 'La transazione con ID: ' . $transaction->id . ' è avvenuta con successo',
+				'apartment' => $apartment
+			];
+			return view('upr.apartments.show', $data);
 
 		} else {
 			$message = 'Non è stato possibile effettuare la transazione';
