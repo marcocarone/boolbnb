@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\upr;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Traits\GetViews;
 
 use Carbon\Carbon;
 use Braintree;
@@ -13,6 +14,7 @@ use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
+	use GetViews;
 	private $braintreeConfig;
 
 	public function __construct()
@@ -92,7 +94,8 @@ class PaymentController extends Controller
 			$subscription->save();
 			$data = [
 				'message' => 'La transazione con ID: ' . $transaction->id . ' è avvenuta con successo',
-				'apartment' => $apartment
+				'apartment' => $apartment,
+				'views' => $this->GetViews($apartment->id)
 			];
 			return view('upr.apartments.show', $data);
 

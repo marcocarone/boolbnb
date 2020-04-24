@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\upr;
 
+use App\Http\Traits\GetViews;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Apartment;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ApartmentController extends Controller
 {
+	use GetViews;
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -108,10 +110,10 @@ class ApartmentController extends Controller
 		if ($apartment->user->id != $idUser) {
 			return redirect()->route('apartment.show', $apartment);
 		}
-		$views = View::where('apartment_id', $apartment->id)->count();
+
 		$data = [
 			'apartment' => $apartment,
-			'views' => $views,
+			'views' => $this->GetViews($apartment->id)
 		];
 		return view('upr.apartments.show', $data);
 	}
