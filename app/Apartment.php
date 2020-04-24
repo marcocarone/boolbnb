@@ -51,4 +51,9 @@ class Apartment extends Model
 		{
 		return $this->belongsToMany('App\Package', "apartment_package");
 		}
+
+		public function views()
+		{
+			return $this->hasMany('App\View');
+		}
 }

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Apartment;
 use App\Service;
 use App\Image;
+use App\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -107,8 +108,12 @@ class ApartmentController extends Controller
 		if ($apartment->user->id != $idUser) {
 			return redirect()->route('apartment.show', $apartment);
 		}
-
-		return view('upr.apartments.show', compact('apartment'));
+		$views = View::where('apartment_id', $apartment->id)->count();
+		$data = [
+			'apartment' => $apartment,
+			'views' => $views,
+		];
+		return view('upr.apartments.show', $data);
 	}
 
 	public function show2(Apartment $apartment)

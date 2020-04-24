@@ -84,7 +84,16 @@
 			</div>
 		</div>
 	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col text-center">
+				<h2>Visualizzazioni Totali:</h2>
+				<div>
+					<h3 class="count">{{$views}}</h3>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div id="map" class='map card m-2 col-md-12' data-lat="{{$apartment->latitude}}" data-lon="{{$apartment->longitude}}"></div>
 </div>
-
 @endsection

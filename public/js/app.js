@@ -42141,8 +42141,20 @@ $(document).ready(function () {
     var ttMap = generateTomTomMap();
     generateMarker(ttMap);
     idCircle;
-  } ////////
+  } // contatore visualizzazioni in show apartment
 
+
+  $('.count').each(function () {
+    $(this).prop('Counter', 0).animate({
+      Counter: $(this).text()
+    }, {
+      duration: 4000,
+      easing: 'swing',
+      step: function step(now) {
+        $(this).text(Math.ceil(now));
+      }
+    });
+  }); ////////
 
   var oldquery;
   $("#address").keyup(function (event) {
