@@ -6,6 +6,7 @@ use App\Apartment;
 use App\ApartmentPackage;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\View;
 
 class ApartmentController extends Controller
 {
@@ -35,14 +36,18 @@ class ApartmentController extends Controller
 	 * @param  \App\Apartment  $apartment
 	 * @return \Illuminate\Http\Response
 	 */
-	public function show(Apartment $apartment)
+	public function show(Apartment $apartment, Request $request)
 	{
 		if (empty($apartment)) {
 			abort(400);
 		}
-
-		// $apartment->views += 1;
-		// $apartment->update();
+	$searchIp = View::where('ip', $request->ip())->latest()->first();
+	if (empty($searchIp) || Carbon::parse($searchIp->created_at)->lt(Carbon::now()->subMinutes(10))) {
+		$view = new View;
+		$view->apartment_id = $apartment->id;
+		$view->ip = $request->ip();
+		$view->save();
+	} 
 		return view('show', compact('apartment'));
 	}
 }

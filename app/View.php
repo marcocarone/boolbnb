@@ -8,6 +8,7 @@ class View extends Model
 {
     protected $fillable = [
         'apartment_id',
+		'ip',
         'created_at'
     ];
 

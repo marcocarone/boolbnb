@@ -20,7 +20,7 @@ class CreateViewsTable extends Migration
 				->on('apartments')
 				->onDelete('cascade')
 				->onUpdate('cascade');
-
+			$table->string('ip');
 			$table->timestamps();
 		});
 	}
