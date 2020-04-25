@@ -25,6 +25,8 @@
     "dependencies": {
         "@turf/circle": "^6.0.1",
         "@turf/turf": "^5.1.6",
-        "handlebars": "^4.7.6"
+        "chart.js": "^2.9.3",
+        "handlebars": "^4.7.6",
+        "lightpick": "^1.6.1"
     }
 }

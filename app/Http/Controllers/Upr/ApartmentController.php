@@ -248,4 +248,18 @@ class ApartmentController extends Controller
 		$apartment->delete();
 		return redirect()->route('upr.apartments.index');
 	}
+
+	public function statistics(Apartment $apartment)
+	{
+		$idUser = Auth::user()->id;
+		if (empty($apartment)) {
+			abort(400);
+		}
+
+		if ($apartment->user->id != $idUser) {
+			abort(401);
+		}
+		
+		return view('upr.apartments.statistics', compact('apartment'));
+	}
 }

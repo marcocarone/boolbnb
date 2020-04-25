@@ -28,9 +28,11 @@
 					</button>
 					<div class="dropdown-menu">
 						<a class="dropdown-item" href="{{route("upr.apartments.show", $apartment)}}">Modifica</a>
-						{{-- <a class="dropdown-item" href="{{route("upr.apartment.show2", $apartment)}}">Galleria immagini</a>
-						<a class="dropdown-item" href="{{route("upr.apartments.edit", $apartment)}}">Modifica</a> --}}
-						<a class="dropdown-item" href="#">Statistiche</a>
+						<form action="{{route("upr.apartment.statistics", $apartment)}}" method="post">
+							@csrf
+							@method('POST')
+							<button class="dropdown-item" type="submit">Statistiche</button>
+						</form>
 						<form action="{{route("upr.payment.process", $apartment)}}" method="post">
 							@csrf
 							@method('POST')

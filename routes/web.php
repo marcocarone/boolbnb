@@ -30,6 +30,7 @@ Route::name('upr.')->prefix('upr')->namespace('Upr')->middleware('auth')->group(
     Route::get('/dashboard', 'HomeController@index')->name('dashboard');
     Route::resource('apartments', 'ApartmentController');
     Route::get('/apartment/{apartment}', 'ApartmentController@show2')->name('apartment.show2');
+    Route::post('/apartment/statistics/{apartment}', 'ApartmentController@statistics')->name('apartment.statistics');
     Route::resource('images', 'ImageController');
     Route::post('delete', 'ImageController@deleteImage');
     Route::resource('message', 'MessageController');
