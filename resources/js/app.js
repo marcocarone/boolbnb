@@ -2,8 +2,16 @@ require("./bootstrap");
 const Handlebars = require("handlebars");
 var Chart = require('chart.js');
 var moment = require('moment');
+var daterangepicker = require("daterangepicker")
 
 $(document).ready(function() {
+	moment.locale('it');
+	// mappa
+	if ($('#map').length != 0) {
+		var ttMap = generateTomTomMap();
+		generateMarker(ttMap);
+		idCircle;
+	}
 	// contatore visualizzazioni in show apartment
 	$('.count').each(function () {
 		$(this).prop('Counter', 0).animate({
@@ -151,43 +159,70 @@ $(document).ready(function() {
 		}
 	});
 	//////////////////////////////////////
-	// Chart.js
-	var ctx = document.getElementById('myChart');
-	var myChart = new Chart(ctx, {
-		type: 'bar',
-		data: {
-			labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-			datasets: [{
-				label: '# of Votes',
-				data: [12, 19, 3, 5, 2, 3],
-				backgroundColor: [
-					'rgba(255, 99, 132, 0.2)',
-					'rgba(54, 162, 235, 0.2)',
-					'rgba(255, 206, 86, 0.2)',
-					'rgba(75, 192, 192, 0.2)',
-					'rgba(153, 102, 255, 0.2)',
-					'rgba(255, 159, 64, 0.2)'
-				],
-				borderColor: [
-					'rgba(255, 99, 132, 1)',
-					'rgba(54, 162, 235, 1)',
-					'rgba(255, 206, 86, 1)',
-					'rgba(75, 192, 192, 1)',
-					'rgba(153, 102, 255, 1)',
-					'rgba(255, 159, 64, 1)'
-				],
-				borderWidth: 1
-			}]
-		},
-		options: {
-			scales: {
-				yAxes: [{
-					ticks: {
-						beginAtZero: true
-					}
-				}]
-			}
+	// daterangepicker
+	$(function () {
+		var start = moment();
+		var end = moment();
+		function cb(start, end) {
+			$('#reportrange span').html(start.format('L') + ' - ' + end.format('L'));
 		}
+		$('#reportrange').daterangepicker({
+			locale: {
+				"format": "DD/MM/YYYY",
+				"separator": " - ",
+				"applyLabel": "Applica",
+				"cancelLabel": "Cancella",
+				"fromLabel": "Da",
+				"toLabel": "A",
+				"customRangeLabel": "Personalizza",
+				"weekLabel": "S",
+				"daysOfWeek": [
+					"Dom",
+					"Lun",
+					"Mar",
+					"Mer",
+					"Gio",
+					"Ven",
+					"Sab"
+				],
+				"monthNames": [
+					"Gennaio",
+					"Febbraio",
+					"Marzo",
+					"Aprile",
+					"Maggio",
+					"Giugno",
+					"Luglio",
+					"Augosto",
+					"Settembre",
+					"Ottobre",
+					"Novembre",
+					"Dicembre"
+				],
+				"firstDay": 1
+			},
+			opens: 'right',
+			startDate: start,
+			endDate: end,
+			ranges: {
+				'Oggi': [moment(), moment()],
+				'Ieri': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+				'Ultimi 7 Giorni': [moment().subtract(6, 'days'), moment()],
+				'Ultimi 30 Giorni': [moment().subtract(29, 'days'), moment()],
+				'Mese Corrente': [moment().startOf('month'), moment().endOf('month')],
+				'Mese Precedente': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+			}
+		}, cb);
+		cb(start, end);
+		///////////////////////////////
+		$('#reportrange').on('apply.daterangepicker', function (ev, picker) {
+			let start = $.trim(ev.target.outerText.split('-')[0]);
+			let end = $.trim(ev.target.outerText.split('-')[1]);
+			console.log(start);
+			console.log(end);
+			apiCallStatistics(start, end);
+		});
+		///////////////////////////////
 	});
 });
 
@@ -264,7 +299,7 @@ function apiCallFilter(map) {
 	var baths_counter = parseInt($('#baths_counter').text());
 	var rooms_counter = parseInt($('#rooms_number').text());
 	$.ajax({
-		url: "api/filtered",
+		url: location.origin + "/api/filtered",
 		method: "POST",
 		data: { 
 			'services': services_filter, 
@@ -337,23 +372,81 @@ function generateCircleRadius(map) {
 	});
 }
 
-// function apiCallStatistics() {
-// 	var apartmentId = parseFloat($("#apartment-id").attr("data-id"));
+function apiCallStatistics(startdate, enddate) {
+	var apartmentId = parseFloat($("#apartment-id").attr("data-id"));
+	$.ajax({
+		url: location.origin + "/api/statistics",
+		method: "POST",
+		data: { 'apartmentId': apartmentId, 'startDate': startdate, 'endDate': enddate },
+		dataType: "json",
+		success: function (data, message, xhr) {
+			if (xhr.status == 200) {
+				var data_test = [];
+				for (var key in data[0]) {
+					data_test.push({
+						'date': key,
+						'count': data[0][key]
+					});
+				}
+				data_test.sort(function (a, b) {
+					var dateA = new Date(a.date), dateB = new Date(b.date);
+					return dateA - dateB;
+				});
+				var d_ = [];
+				var l_ = [];
+				data_test.forEach(element => {
+					d_.push(element.date);
+					l_.push(element.count);
+				});
+				console.log(data);
+				console.log(d_);
+				console.log(l_);
 
-// 	$.ajax({
-// 		url: "api/statistics",
-// 		method: "POST",
-// 		data: { 'apartmentId': apartmentId, 'startDate': , 'endDate': },
-// 		dataType: "json",
-// 		success: function (data, message, xhr) {
-// 			if (xhr.status == 200) {
+				generateChart(d_, l_);
+			}
+		},
+		error: function () {
+			console.log('error')
+		}
+	});
+}
 
-// 			} else {
-
-// 			}
-// 		},
-// 		error: function () {
-
-// 		}
-// 	});
-// }
+function generateChart(labels, data) {
+	var ctx = document.getElementById('myChart');
+	var myChart = new Chart(ctx, {
+		type: 'bar',
+		data: {
+			labels: labels,
+			datasets: [{
+				label: 'Visualizzazioni',
+				data: data,
+				backgroundColor: [
+					'rgba(255, 99, 132, 0.2)',
+					'rgba(54, 162, 235, 0.2)',
+					'rgba(255, 206, 86, 0.2)',
+					'rgba(75, 192, 192, 0.2)',
+					'rgba(153, 102, 255, 0.2)',
+					'rgba(255, 159, 64, 0.2)',
+				],
+				borderColor: [
+					'rgba(255, 99, 132, 1)',
+					'rgba(54, 162, 235, 1)',
+					'rgba(255, 206, 86, 1)',
+					'rgba(75, 192, 192, 1)',
+					'rgba(153, 102, 255, 1)',
+					'rgba(255, 159, 64, 1)'
+				],
+				borderWidth: 1
+			}]
+		},
+		options: {
+			scales: {
+				yAxes: [{
+					ticks: {
+						beginAtZero: true
+					}
+				}]
+			}
+		}
+	});
+}
