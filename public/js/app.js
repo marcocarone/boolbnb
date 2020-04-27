@@ -77478,7 +77478,8 @@ $(document).ready(function () {
     var ttMap = generateTomTomMap();
     generateMarker(ttMap);
     idCircle;
-  }
+  } // datarangepicker statistics
+
 
   if ($('#myChart').length != 0) {
     dataRangePickerGenerator(); ///////////////////////////////
@@ -77866,6 +77867,7 @@ function generateChart(labels, data) {
       scales: {
         yAxes: [{
           ticks: {
+            stepSize: 1,
             beginAtZero: true
           }
         }]
@@ -77888,7 +77890,7 @@ function dynamicColors() {
   var r = Math.floor(Math.random() * 255);
   var g = Math.floor(Math.random() * 255);
   var b = Math.floor(Math.random() * 255);
-  return "rgba(" + r + "," + g + "," + b + ", 0.5)";
+  return "rgba(" + r + "," + g + "," + b + ", 0.6)";
 }
 
 function addChartData(chart, label, data) {
