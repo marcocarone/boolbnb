@@ -77478,6 +77478,18 @@ $(document).ready(function () {
     var ttMap = generateTomTomMap();
     generateMarker(ttMap);
     idCircle;
+  }
+
+  if ($('#myChart').length != 0) {
+    dataRangePickerGenerator(); ///////////////////////////////
+
+    apiCallStatistics(moment().format('L'), moment().format('L'), true); ///////////////////////////////
+
+    $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
+      var start = $.trim(ev.target.outerText.split('-')[0]);
+      var end = $.trim(ev.target.outerText.split('-')[1]);
+      apiCallStatistics(start, end, false);
+    });
   } // contatore visualizzazioni in show apartment
 
 
@@ -77641,52 +77653,6 @@ $(document).ready(function () {
       var thisId = $(this).data('id');
       $('.markerHome[data-id="' + thisId + '"]').removeClass('selected-marker');
     }
-  }); //////////////////////////////////////
-  // daterangepicker
-
-  $(function () {
-    var start = moment();
-    var end = moment();
-
-    function cb(start, end) {
-      $('#reportrange span').html(start.format('L') + ' - ' + end.format('L'));
-    }
-
-    $('#reportrange').daterangepicker({
-      locale: {
-        "format": "DD/MM/YYYY",
-        "separator": " - ",
-        "applyLabel": "Applica",
-        "cancelLabel": "Cancella",
-        "fromLabel": "Da",
-        "toLabel": "A",
-        "customRangeLabel": "Personalizza",
-        "weekLabel": "S",
-        "daysOfWeek": ["Dom", "Lun", "Mar", "Mer", "Gio", "Ven", "Sab"],
-        "monthNames": ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Augosto", "Settembre", "Ottobre", "Novembre", "Dicembre"],
-        "firstDay": 1
-      },
-      opens: 'right',
-      startDate: start,
-      endDate: end,
-      ranges: {
-        'Oggi': [moment(), moment()],
-        'Ieri': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-        'Ultimi 7 Giorni': [moment().subtract(6, 'days'), moment()],
-        'Ultimi 30 Giorni': [moment().subtract(29, 'days'), moment()],
-        'Mese Corrente': [moment().startOf('month'), moment().endOf('month')],
-        'Mese Precedente': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-      }
-    }, cb);
-    cb(start, end); ///////////////////////////////
-
-    $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
-      var start = $.trim(ev.target.outerText.split('-')[0]);
-      var end = $.trim(ev.target.outerText.split('-')[1]);
-      console.log(start);
-      console.log(end);
-      apiCallStatistics(start, end);
-    }); ///////////////////////////////
   });
 });
 
@@ -77719,13 +77685,13 @@ function generateMarker(map) {
       'latitude': $(".coordinates").data('lat')
     });
   } else {
-    for (var i = 0; i < $(".apartment").length; i++) {
+    for (var _i = 0; _i < $(".apartment").length; _i++) {
       apartmentArray.push({
-        'show': $(".apartment .imgdiv a")[i].getAttribute("href"),
-        'title': $(".apartment .image_home")[i].getAttribute('alt'),
-        'cover_img': $(".apartment .image_home")[i].getAttribute('src'),
-        'longitude': $(".apartment .coordinates")[i].getAttribute('data-lon'),
-        'latitude': $(".apartment .coordinates")[i].getAttribute('data-lat')
+        'show': $(".apartment .imgdiv a")[_i].getAttribute("href"),
+        'title': $(".apartment .image_home")[_i].getAttribute('alt'),
+        'cover_img': $(".apartment .image_home")[_i].getAttribute('src'),
+        'longitude': $(".apartment .coordinates")[_i].getAttribute('data-lon'),
+        'latitude': $(".apartment .coordinates")[_i].getAttribute('data-lat')
       });
     }
   }
@@ -77809,7 +77775,7 @@ function apiCallFilter(map) {
 function generateCircleRadius(map) {
   var centerLat = parseFloat($("#map").attr("data-lat"));
   var centerLon = parseFloat($("#map").attr("data-lon"));
-  var radius = parseInt($('#distance-value').text()); //cal per raggio a 128 punti
+  var radius = parseInt($('#distance-value').text()); //cal per raggio a 512 punti
 
   var rad = 3.14159265359;
   var radLat = radius / 111.1896;
@@ -77847,7 +77813,8 @@ function generateCircleRadius(map) {
 }
 
 function apiCallStatistics(startdate, enddate) {
-  var apartmentId = parseFloat($("#apartment-id").attr("data-id"));
+  var first = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+  var apartmentId = parseInt($("#apartment-id").attr("data-id"));
   $.ajax({
     url: location.origin + "/api/statistics",
     method: "POST",
@@ -77859,30 +77826,20 @@ function apiCallStatistics(startdate, enddate) {
     dataType: "json",
     success: function success(data, message, xhr) {
       if (xhr.status == 200) {
-        var data_test = [];
+        var labelsCharts = [];
+        var dataCharts = [];
 
-        for (var key in data[0]) {
-          data_test.push({
-            'date': key,
-            'count': data[0][key]
-          });
+        for (var _i2 = 0; _i2 < data[0].length; _i2++) {
+          labelsCharts.push(moment(data[0][_i2].date).format('L'));
+          dataCharts.push(data[0][_i2].views);
         }
 
-        data_test.sort(function (a, b) {
-          var dateA = new Date(a.date),
-              dateB = new Date(b.date);
-          return dateA - dateB;
-        });
-        var d_ = [];
-        var l_ = [];
-        data_test.forEach(function (element) {
-          d_.push(element.date);
-          l_.push(element.count);
-        });
-        console.log(data);
-        console.log(d_);
-        console.log(l_);
-        generateChart(d_, l_);
+        if (first) {
+          generateChart(labelsCharts, dataCharts);
+        } else {
+          removeChartData(myChart);
+          addChartData(myChart, labelsCharts, dataCharts);
+        }
       }
     },
     error: function error() {
@@ -77893,19 +77850,19 @@ function apiCallStatistics(startdate, enddate) {
 
 function generateChart(labels, data) {
   var ctx = document.getElementById('myChart');
-  var myChart = new Chart(ctx, {
+  myChart = new Chart(ctx, {
     type: 'bar',
     data: {
       labels: labels,
       datasets: [{
         label: 'Visualizzazioni',
         data: data,
-        backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)', 'rgba(75, 192, 192, 0.2)', 'rgba(153, 102, 255, 0.2)', 'rgba(255, 159, 64, 0.2)'],
-        borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)'],
+        backgroundColor: poolColors(labels.length),
         borderWidth: 1
       }]
     },
     options: {
+      responsive: true,
       scales: {
         yAxes: [{
           ticks: {
@@ -77915,6 +77872,78 @@ function generateChart(labels, data) {
       }
     }
   });
+}
+
+function poolColors(a) {
+  var pool = [];
+
+  for (i = 0; i < a; i++) {
+    pool.push(dynamicColors());
+  }
+
+  return pool;
+}
+
+function dynamicColors() {
+  var r = Math.floor(Math.random() * 255);
+  var g = Math.floor(Math.random() * 255);
+  var b = Math.floor(Math.random() * 255);
+  return "rgba(" + r + "," + g + "," + b + ", 0.5)";
+}
+
+function addChartData(chart, label, data) {
+  chart.data.labels = label;
+  chart.data.datasets.forEach(function (dataset) {
+    dataset.data = data;
+    dataset.backgroundColor = poolColors(label.length);
+  });
+  chart.update();
+}
+
+function removeChartData(chart) {
+  chart.data.labels.pop();
+  chart.data.datasets.forEach(function (dataset) {
+    dataset.data.pop();
+    dataset.backgroundColor.pop();
+  });
+  chart.update();
+}
+
+function dataRangePickerGenerator() {
+  var start = moment();
+  var end = moment();
+
+  function cb(start, end) {
+    $('#reportrange span').html(start.format('L') + ' - ' + end.format('L'));
+  }
+
+  $('#reportrange').daterangepicker({
+    locale: {
+      "format": "DD/MM/YYYY",
+      "separator": " - ",
+      "applyLabel": "Applica",
+      "cancelLabel": "Cancella",
+      "fromLabel": "Da",
+      "toLabel": "A",
+      "customRangeLabel": "Personalizza",
+      "weekLabel": "S",
+      "daysOfWeek": ["Dom", "Lun", "Mar", "Mer", "Gio", "Ven", "Sab"],
+      "monthNames": ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Augosto", "Settembre", "Ottobre", "Novembre", "Dicembre"],
+      "firstDay": 1
+    },
+    opens: 'right',
+    startDate: start,
+    endDate: end,
+    ranges: {
+      'Oggi': [moment(), moment()],
+      'Ieri': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+      'Ultimi 7 Giorni': [moment().subtract(6, 'days'), moment()],
+      'Ultimi 30 Giorni': [moment().subtract(29, 'days'), moment()],
+      'Mese Corrente': [moment().startOf('month'), moment().endOf('month')],
+      'Mese Precedente': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+    }
+  }, cb);
+  cb(start, end);
 }
 
 /***/ }),
