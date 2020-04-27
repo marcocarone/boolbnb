@@ -77827,6 +77827,7 @@ function apiCallStatistics(startdate, enddate) {
     dataType: "json",
     success: function success(data, message, xhr) {
       if (xhr.status == 200) {
+        $("div.messageResult").empty();
         var labelsCharts = [];
         var dataCharts = [];
 
@@ -77841,10 +77842,14 @@ function apiCallStatistics(startdate, enddate) {
           removeChartData(myChart);
           addChartData(myChart, labelsCharts, dataCharts);
         }
+      } else {
+        $("div.messageResult").empty();
+        $(".messageResult").append('<h2>Non è possibile elaborare i dati</h2>');
       }
     },
     error: function error() {
-      console.log('error');
+      $("div.messageResult").empty();
+      $(".messageResult").append('<h2>Impossibile effettuare la richiesta</h2>');
     }
   });
 }

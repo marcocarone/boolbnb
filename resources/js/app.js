@@ -327,6 +327,7 @@ function apiCallStatistics(startdate, enddate, first = false) {
 		dataType: "json",
 		success: function (data, message, xhr) {
 			if (xhr.status == 200) {
+				$("div.messageResult").empty();
 				var labelsCharts = [];
 				var dataCharts = [];
 				for (let i = 0; i < data[0].length; i++) {
@@ -339,10 +340,14 @@ function apiCallStatistics(startdate, enddate, first = false) {
 					removeChartData(myChart);
 					addChartData(myChart, labelsCharts, dataCharts);
 				}
+			} else {
+				$("div.messageResult").empty();
+				$(".messageResult").append('<h2>Non è possibile elaborare i dati</h2>');
 			}
 		},
 		error: function () {
-			console.log('error');
+			$("div.messageResult").empty();
+			$(".messageResult").append('<h2>Impossibile effettuare la richiesta</h2>');
 		}
 	});
 }

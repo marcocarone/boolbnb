@@ -16,6 +16,7 @@
 		</div>
 		<div class="row mt-5">
 			<div class="col-12">
+				<div class="messageResult text-center"></div>	
 				<canvas id="myChart" width="100%"></canvas>
 			</div>
 		</div>
