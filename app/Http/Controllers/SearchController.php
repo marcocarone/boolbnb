@@ -14,7 +14,12 @@ class SearchController extends Controller
 
 		public function index(Request $request)
 		{
+			if (!$request->has('address') || !$request->has('latitude') || !$request->has('longitude')) {
+				return redirect()->route('home');
+			}
+
 			$data = $request->all();
+
 			$apartments = Apartment::where('active', '1')->get();
 			$apartmentsInRadius = [];
 			foreach ($apartments as  $apartment) {

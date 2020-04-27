@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::get('/', 'ApartmentController@index')->name('home');
-Route::post('/search', 'SearchController@index')->name('search.index');
+Route::any('/search', 'SearchController@index')->name('search.index');
 Route::get('/apartment/{apartment}', 'ApartmentController@show')->name('apartment.show');
 Route::post('/guest/messages', 'MessageController@store')->name('guest.message.store');
 

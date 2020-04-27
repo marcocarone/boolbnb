@@ -51,7 +51,7 @@ class MessageController extends Controller
         if (!$saved) {
             return redirect()->back()->with('status', "C'è stato un problema. Il messaggio non è stato mandato");
         }
-        return redirect()->back()->with('status', 'email mandata');  ;
+        return redirect()->back()->with('status', 'email mandata');
     }
 
     /**
