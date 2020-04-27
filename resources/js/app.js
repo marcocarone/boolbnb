@@ -180,7 +180,7 @@ function generateTomTomMap() {
 		key: 'MWVEigyGPAZjHyTOtDdAT88VGn5lldaS',
 		style: 'tomtom://vector/1/basic-main',
 		center: [centerLon, centerLat],
-		zoom: 11
+		zoom: 10
 	});
 	map.addControl(new tt.FullscreenControl());
 	map.addControl(new tt.NavigationControl());
@@ -310,9 +310,9 @@ function generateCircleRadius(map) {
 			},
 			'layout': {},
 			'paint': {
-				'fill-color': '#db356c',
-				'fill-opacity': 0.2,
-				'fill-outline-color': '#db356c'
+				'fill-color': '#ff0054',
+				'fill-opacity': 0.13,
+				'fill-outline-color': '#000'
 			}
 		});
 	});
