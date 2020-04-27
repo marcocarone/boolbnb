@@ -366,6 +366,12 @@ function generateChart(labels, data, totalviews) {
 			}]
 		},
 		options: {
+			legend: {
+				labels: {
+					fontColor: 'black',
+					fontSize: 18
+				}
+			},
 			responsive: true,
 			scales: {
 				yAxes: [{
