@@ -77844,7 +77844,7 @@ function apiCallStatistics(startdate, enddate) {
         }
       } else {
         $("div.messageResult").empty();
-        $(".messageResult").append('<h2>Non è possibile elaborare i dati</h2>');
+        $(".messageResult").append('<h2>Non è stato possibile elaborare i dati</h2>');
       }
     },
     error: function error() {
