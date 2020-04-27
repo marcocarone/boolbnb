@@ -335,10 +335,10 @@ function apiCallStatistics(startdate, enddate, first = false) {
 					dataCharts.push(data[0][i].views);
 				}
 				if (first) {
-					generateChart(labelsCharts, dataCharts);
+					generateChart(labelsCharts, dataCharts, dataCharts.reduce((a, b) => a + b, 0));
 				} else {
 					removeChartData(myChart);
-					addChartData(myChart, labelsCharts, dataCharts);
+					addChartData(myChart, labelsCharts, dataCharts, dataCharts.reduce((a, b) => a + b, 0));
 				}
 			} else {
 				$("div.messageResult").empty();
@@ -352,14 +352,14 @@ function apiCallStatistics(startdate, enddate, first = false) {
 	});
 }
 
-function generateChart(labels, data) {
+function generateChart(labels, data, totalviews) {
 	var ctx = document.getElementById('myChart');
 	myChart = new Chart(ctx, {
 		type: 'bar',
 		data: {
 			labels: labels,
 			datasets: [{
-				label: 'Visualizzazioni',
+				label: 'Visualizzazioni Totali: ' + totalviews,
 				data: data,
 				backgroundColor: poolColors(labels.length),
 				borderWidth: 1
@@ -394,9 +394,10 @@ function dynamicColors() {
 	return "rgba(" + r + "," + g + "," + b + ", 0.6)";
 }
 
-function addChartData(chart, label, data) {
+function addChartData(chart, label, data, totalviews) {
 	chart.data.labels = label;
 	chart.data.datasets.forEach((dataset) => {
+		dataset.label = 'Visualizzazioni Totali: ' + totalviews;
 		dataset.data = data;
 		dataset.backgroundColor = poolColors(label.length);
 	});
@@ -406,6 +407,7 @@ function addChartData(chart, label, data) {
 function removeChartData(chart) {
 	chart.data.labels.pop();
 	chart.data.datasets.forEach((dataset) => {
+		dataset.label = "";
 		dataset.data.pop();
 		dataset.backgroundColor.pop();
 	});
