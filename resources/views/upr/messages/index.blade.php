@@ -1,31 +1,49 @@
-@extends('layouts.app')
+@extends('layouts.layout01')
 @section('content')
-<div class="container">
-    <div class="card m-2">
-        <div class="card-body">
 
-            <h2 class="card-title mt-3"> Messaggi ricevuti</h2>
-            @foreach ($apartments as  $apartment)
+ <div class="preloader"></div>
 
-              @foreach ($apartment->messages as $message)
 
-              <div class="card m-2">
-                  <div class="card-body">
-                    <h4 class="card-title mt-3">Appartamento: {{$message->apartment->title}}</h4>
-                    <p class="card-text">Email del richiedente: {{$message->email}}</p>
-                      <p class="card-text"> Messaggio: {{$message->message}}</p>
-                      <p class="card-text"> Messaggio del: {{$message->created_at}}</p>
+<div class="home-messages">
 
-                      <form action="{{route('upr.message.destroy', $message)}}" method="POST">
-                          @csrf
-                          @method('DELETE')
-                          <button class="btn btn-danger m-1" type="submit">Elimina</button>
-                      </form>
-                  </div>
-              </div>
-              @endforeach
-            @endforeach
-        </div>
+    <div class="max-w">
+        <h3>Messaggi ricevuti</h3>
+
     </div>
 
-    @endsection
+    <div class="home-messages__wrapper">
+        @foreach ($apartments as $apartment)
+
+
+          @foreach ($apartment->messages as $message)
+
+        <div class="msm-box">
+          <div class="msm-delete">
+              <form action="{{route('upr.message.destroy', $message)}}" method="POST">
+                  @csrf
+                  @method('DELETE')
+                  <button class="btn-delete" type="submit"><i class="lni lni-close"></i></button>
+              </form>
+          </div>
+          <div class="title">
+              <h4 >Appartamento: {{$message->apartment->title}}</h4>
+
+          </div>
+          <div class="msn-content">
+            <p ><strong>Email del richiedente:</strong> {{$message->email}}</p>
+            <p > {{$message->message}}</p>
+            <small > Messaggio del: {{$message->created_at}}</small>
+          </div>
+
+
+
+        </div>
+
+        @endforeach
+        @endforeach
+
+    </div>
+</div>
+{{-- ---- --}}
+
+@endsection

@@ -16,4 +16,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::namespace("Api")->group(function (){
 	Route::post("/filtered", "FilterController@Filter");
+	Route::post("/statistics", "StatisticsController@Statistics");
 });

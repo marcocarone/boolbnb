@@ -4,47 +4,45 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Apartment;
+use App\ApartmentPackage;
+use Carbon\Carbon;
 use App\Service;
 use App\Image;
+use App\Http\Traits\CalcDistance;
+
 
 class SearchController extends Controller
-{
-    public function index(Request $request)
-    {
-        $data = $request->all();
-
-        $apartments = Apartment::where('active', '1')->get();
-        $apartmentsInRadius = [];
-        foreach ($apartments as  $apartment) {
-            $km = distance($data["latitude"], $data["longitude"], $apartment->latitude, $apartment->longitude);
-            if ($km <= 20) {
-                $apartmentsInRadius[] = $apartment;
-            }
-        }
-        $services = Service::all();
-        $data =[
-      "address" => $data["address"],
-      "apartmentsInRadius" => $apartmentsInRadius,
-      "centerLatitude" => $data["latitude"],
-      "centerLongitude" => $data["longitude"],
-      "services" => $services
-    ];
-
-        return view('search', $data);
-    }
-}
+	{
+		use CalcDistance;
 
 
-function distance($lat1, $lon1, $lat2, $lon2)
-{
-    if (($lat1 == $lat2) && ($lon1 == $lon2)) {
-        return 0;
-    } else {
-        $theta = $lon1 - $lon2;
-        $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
-        $dist = acos($dist);
-        $dist = rad2deg($dist);
-        $km = $dist * 60 * 1.85316;
-        return $km;
-    }
-}
+		public function index(Request $request)
+		{
+			if (!$request->has('address') || !$request->has('latitude') || !$request->has('longitude')) {
+				return redirect()->route('home');
+			}
+			$data = $request->all();
+			$sponsoredApartments = [];
+			$allApartmentPackage = ApartmentPackage::all();
+			foreach ($allApartmentPackage as $apartmentpkg) {
+				if (Carbon::parse($apartmentpkg->start)->lt(Carbon::now()) && Carbon::parse($apartmentpkg->end)->gt(Carbon::now())) {
+					$sponsoredApartments[] = $apartmentpkg->apartment_id;
+				}
+			}
+			$advApt = Apartment::where('active', '1')->whereIn('id', $sponsoredApartments)->latest()->get();
+			$noAdvApt = Apartment::where('active', '1')->whereNotIn('id', $sponsoredApartments)->latest()->get();
+
+			$apartmentsInRadius = $this->DistanceFilter($noAdvApt, $data["latitude"], $data["longitude"]);
+			$advApt = $this->DistanceFilter($advApt, $data["latitude"], $data["longitude"]);
+			$services = Service::all();
+			$data =[
+				"address" => $data["address"],
+				"apartmentsInRadius" => $apartmentsInRadius,
+				"sponsoredApartments" => $advApt,
+				"centerLatitude" => $data["latitude"],
+				"centerLongitude" => $data["longitude"],
+				"services" => $services
+			];
+			return view('search', $data);
+		}
+	}

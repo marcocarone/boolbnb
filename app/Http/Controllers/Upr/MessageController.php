@@ -53,7 +53,8 @@ class MessageController extends Controller
         if (!$saved) {
             return redirect()->back()->with('status', "C'è stato un problema. Il messaggio non è stato mandato");
         }
-        return redirect()->back()->with('status', 'email mandata');  ;
+        return redirect()->back()->with('status', 'email mandata');
+
     }
 
     /**
@@ -98,11 +99,16 @@ class MessageController extends Controller
      */
     public function destroy(Message $message)
     {
+        $idUser = Auth::user()->id;
         if (empty($message)) {
-            abort(404);
+            abort(400);
         }
 
-        $message->delete();
-        return redirect()->back();
+        if ($message->apartment->user->id != $idUser) {
+            abort(401);
+          }
+
+          $message->delete();
+          return redirect()->back();
     }
 }

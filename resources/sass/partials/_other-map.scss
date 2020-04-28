@@ -1,0 +1,92 @@
+.daterangepicker .ranges li.active {
+    background-color: #f7f7f7;
+    color: #d34262;
+}
+
+
+.btn-sm{
+
+    border-radius: 2rem;
+}
+
+.btn-primary {
+    color: #ffffff;
+    background-color: #d34262;
+    border-color: #d34262;
+    border-radius: 8px;
+    &:hover {
+      background-color: #d34262;
+      border-color: #d34262;
+    }
+}
+
+
+
+.daterangepicker td.in-range {
+    background-color: #d3426229;
+
+
+}
+.daterangepicker td.active, .daterangepicker td.active:hover {
+    background-color: #d34262;
+    border-color: transparent;
+    color: #fff;
+}
+
+.btn-primary.disabled, .btn-primary:disabled {
+    color: #ffffff;
+    background-color: #d34262;
+    border-color: #d34262;
+}
+.markerHome {
+    background-image: url("/storage/assets/home_icon.png");
+    background-size: cover;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.mapboxgl-popup-content {
+    padding: 0 !important;
+    border-radius: 5px !important;
+    overflow: hidden !important;
+    box-shadow: 3px 3px 10px 2px rgba(0, 0, 0, 0.55) !important;
+}
+
+.selected-marker {
+    background-image: url("/storage/assets/marker_selected.png");
+}
+
+.btn-counter span {
+    margin: 0 10px;
+    font-size: 15px;
+}
+// prova per + e - btn
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300&display=swap');
+
+.btn-counter .btn-circle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Fira Sans', sans-serif;
+    line-height: 20px;
+    font-size: 30px;
+    font-weight: 300;
+}
+
+.btn-circle {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 50%;
+    border: 1px solid grey;
+    width: 30px;
+    height: 30px;
+}
+
+.span_number_counter {
+    display: inline-block;
+    min-width: 18px;
+    text-align: center;
+}
