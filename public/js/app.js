@@ -77469,29 +77469,118 @@ var Chart = __webpack_require__(/*! chart.js */ "./node_modules/chart.js/dist/Ch
 
 var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 
-var daterangepicker = __webpack_require__(/*! daterangepicker */ "./node_modules/daterangepicker/daterangepicker.js");
+var daterangepicker = __webpack_require__(/*! daterangepicker */ "./node_modules/daterangepicker/daterangepicker.js"); // preload della pagina
 
+
+$(window).on('load', function () {
+  $('.preloader').delay(500).fadeOut(700);
+}); // funzioni per Header
+// menu header scorrimento
+
+$(window).scroll(function () {
+  var scroll = $(window).scrollTop();
+
+  if (scroll >= 350) {
+    $(".top-header").addClass("fix");
+    $(".top-header").addClass("fade-in-top");
+    $(".top-header__wrapper").css("border-bottom", "none");
+  } else {
+    $(".top-header").removeClass("fix");
+    $(".top-header").removeClass("fade-in-top");
+  }
+});
 $(document).ready(function () {
-  moment.locale('it'); // mappa
+  moment.locale('it'); // cambio box checked in pagamenti
 
-  if ($('#map').length != 0) {
-    var ttMap = generateTomTomMap();
-    generateMarker(ttMap);
-    idCircle;
-  } // datarangepicker statistics
+  $('.payment-box-checked').on('change', function () {
+    if ($(this).parent().parent().hasClass("box-checked") == false) {
+      $(".left").find(".box-spec").removeClass("box-checked");
+      $(".box-spec").find("h4").removeClass("white-text");
+      $(".box-spec").parent().find("h2").removeClass("white-text");
+      $(this).parent().parent().addClass("box-checked");
+      $(this).parent().parent().find("h4").addClass("white-text");
+      $(this).parent().parent().find("h2").addClass("white-text");
+    }
+  });
+  viewMobileMenu($(".parent__drop-down"), $(".drop-down"), $(".close-menu"));
+  getWidth($(".drop-down"), $(".parent__drop-down"), $(".close-menu"));
+  viewMobileMenu($(".login-menu"), $(".login-menu__drop-down"), $(".close-login-menu"));
+  getWidth($(".login-menu__drop-down"), $(".login-menu"), $(".close-login-menu"));
+  toggleMenu($(".parent__drop-down"), $(".login-menu__drop-down"), $(".login-menu"), $(".close-login-menu"));
+  toggleMenu($(".login-menu"), $(".drop-down"), $(".parent__drop-down"), $(".close-menu"));
 
-
-  if ($('#myChart').length != 0) {
-    dataRangePickerGenerator(); ///////////////////////////////
-
-    apiCallStatistics(moment().format('L'), moment().format('L'), true); ///////////////////////////////
-
-    $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
-      var start = $.trim(ev.target.outerText.split('-')[0]);
-      var end = $.trim(ev.target.outerText.split('-')[1]);
-      apiCallStatistics(start, end, false);
+  function toggleMenu(parent1, parent2, dropDown, closeMenu) {
+    parent1.click(function () {
+      if (parent2.hasClass("active") == true) {
+        parent2.removeClass("active");
+        dropDown.removeClass("d-none");
+        closeMenu.addClass("d-none");
+      }
     });
-  } // contatore visualizzazioni in show apartment
+  }
+
+  function viewMobileMenu(parent, dropMenu, closeMenu) {
+    parent.click(function () {
+      dropMenu.addClass("active");
+      parent.addClass("d-none");
+      closeMenu.removeClass("d-none");
+    });
+    closeMenu.click(function () {
+      dropMenu.removeClass("active");
+      parent.removeClass("d-none");
+      closeMenu.addClass("d-none");
+    });
+  } // fine menu a tendina
+
+
+  function getWidth(drop, parentDrop, closeMenu) {
+    var width = $(window).width();
+    $(window).on('resize', function () {
+      if ($(this).width() !== width) {
+        width = $(this).width();
+
+        if (width > 1024) {
+          drop.removeClass("active");
+          parentDrop.removeClass("d-none");
+          closeMenu.addClass("d-none");
+        }
+      }
+    });
+  } // ---------------
+  //-----------------------
+
+
+  function readURL(input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+
+      reader.onload = function (e) {
+        $('#blah').attr('src', e.target.result);
+      };
+
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  $("#validatedCustomFile").change(function () {
+    readURL(this);
+  });
+  simulationCreateAppartment($("#bath-create"), $("#bath-append"));
+  simulationCreateAppartment($("#room-create"), $("#room-append"));
+  simulationCreateAppartment($("#mq-create"), $("#mq-append"));
+  simulationCreateAppartment($("#price"), $("#price-append"));
+  simulationCreateAppartment($("#address"), $("#address-append"));
+  simulationCreateAppartment($("#create-title"), $("#title-append"));
+
+  function simulationCreateAppartment(id, idAppend) {
+    id.on('keyup mouseup mousemove', function () {
+      var value = id.val();
+      idAppend.text(value);
+    });
+  } // ---------------
+  //-----------------------
+  //-----------------------
+  // contatore visualizzazioni in show apartment
 
 
   $('.count').each(function () {
@@ -77504,7 +77593,27 @@ $(document).ready(function () {
         $(this).text(Math.ceil(now));
       }
     });
-  }); ////////
+  }); // mappa
+
+  if ($('#map').length != 0) {
+    var ttMap = generateTomTomMap();
+    generateMarker(ttMap);
+    idCircle;
+  } // datarangepicker statistics
+
+
+  if ($('#myChart').length != 0) {
+    dataRangePickerGenerator(); ///////////////////////////////
+
+    apiCallStatistics(moment().subtract(29, 'days').format('L'), moment().format('L'), true); ///////////////////////////////
+
+    $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
+      var start = $.trim(ev.target.outerText.split('-')[0]);
+      var end = $.trim(ev.target.outerText.split('-')[1]);
+      apiCallStatistics(start, end, false);
+    });
+  } ////////
+
 
   var oldquery;
   $("#address").keyup(function (event) {
@@ -77558,13 +77667,13 @@ $(document).ready(function () {
     $("#latitude").val($(this).data("latitude"));
     $("#longitude").val($(this).data("longitude"));
     $("#ricerca").removeAttr("disabled");
-    $("#ricerca").removeClass("btn-outline-secondary");
-    $("#ricerca").addClass("btn-success");
+    $("#ricerca").removeClass("search__btn-disabled");
+    $("#ricerca").addClass("search__btn");
   });
   $('#address').on('input', function () {
     $('#ricerca').prop('disabled', true);
-    $("#ricerca").addClass("btn-outline-secondary");
-    $("#ricerca").removeClass("btn-success");
+    $("#ricerca").addClass("search__btn-disabled");
+    $("#ricerca").removeClass("search__btn");
   }); //////////////////////////////////////////////
   // filtri
   // cambio il valore del contatore stanze
@@ -77643,18 +77752,16 @@ $(document).ready(function () {
   $(".change-filter").change(function () {
     apiCallFilter(ttMap);
   }); /////////////////////////////////////////
-  // cambio icona marker per apt in hover
+  // cambio icona marker per app in hover
 
-  $(".apartment").on({
-    mouseenter: function mouseenter() {
-      var thisId = $(this).data('id');
-      $('.markerHome[data-id="' + thisId + '"]').addClass('selected-marker');
-    },
-    mouseleave: function mouseleave() {
-      var thisId = $(this).data('id');
-      $('.markerHome[data-id="' + thisId + '"]').removeClass('selected-marker');
-    }
+  $(document).on('mouseenter', '.apartment', function () {
+    var thisId = $(this).data('id');
+    $('.markerHome[data-id="' + thisId + '"]').addClass('selected-marker');
   });
+  $(document).on('mouseleave', '.apartment', function () {
+    var thisId = $(this).data('id');
+    $('.markerHome[data-id="' + thisId + '"]').removeClass('selected-marker');
+  }); //////////////////////////////////////
 });
 
 function generateTomTomMap() {
@@ -77686,13 +77793,13 @@ function generateMarker(map) {
       'latitude': $(".coordinates").data('lat')
     });
   } else {
-    for (var _i = 0; _i < $(".apartment").length; _i++) {
+    for (var i = 0; i < $(".apartment").length; i++) {
       apartmentArray.push({
-        'show': $(".apartment .imgdiv a")[_i].getAttribute("href"),
-        'title': $(".apartment .image_home")[_i].getAttribute('alt'),
-        'cover_img': $(".apartment .image_home")[_i].getAttribute('src'),
-        'longitude': $(".apartment .coordinates")[_i].getAttribute('data-lon'),
-        'latitude': $(".apartment .coordinates")[_i].getAttribute('data-lat')
+        'show': $(".apartment .imgdiv a")[i].getAttribute("href"),
+        'title': $(".apartment .image_home")[i].getAttribute('alt'),
+        'cover_img': $(".apartment .image_home")[i].getAttribute('src'),
+        'longitude': $(".apartment .coordinates")[i].getAttribute('data-lon'),
+        'latitude': $(".apartment .coordinates")[i].getAttribute('data-lat')
       });
     }
   }
@@ -77734,8 +77841,10 @@ function apiCallFilter(map) {
   var distance_filter = parseInt($("#distance").val());
   var baths_counter = parseInt($('#baths_counter').text());
   var rooms_counter = parseInt($('#rooms_number').text());
+  $("#apartments").empty();
+  $("div.messageResult").empty();
   $.ajax({
-    url: location.origin + "/api/filtered",
+    url: "api/filtered",
     method: "POST",
     data: {
       'services': services_filter,
@@ -77747,27 +77856,30 @@ function apiCallFilter(map) {
     dataType: "json",
     success: function success(data, message, xhr) {
       if (xhr.status == 200) {
-        $("#apartments").empty();
-        $("div.messageResult").empty();
         var template = Handlebars.compile($("#entry-template").html());
 
         for (var index = 0; index < data.results.length; index++) {
-          $("#apartments").append(template(data.results[index]));
+          if (data.results[index].sponsored) {
+            $("#apartments").append(template(data.results[index]));
+          }
+        }
+
+        for (var _index = 0; _index < data.results.length; _index++) {
+          if (!data.results[_index].sponsored) {
+            $("#apartments").append(template(data.results[_index]));
+          }
         }
 
         generateMarker(map);
 
         if (!data.results.length) {
-          $("div.messageResult").empty();
           $(".messageResult").append('<h2>La ricerca non ha prodotto risultati</h2>');
         }
       } else {
-        $("div.messageResult").empty();
         $(".messageResult").append('<h2>Errore server APi</h2>');
       }
     },
     error: function error() {
-      $("div.messageResult").empty();
       $(".messageResult").append('<h2>Impossibile effettuare la richiesta</h2>');
     }
   });
@@ -77776,7 +77888,7 @@ function apiCallFilter(map) {
 function generateCircleRadius(map) {
   var centerLat = parseFloat($("#map").attr("data-lat"));
   var centerLon = parseFloat($("#map").attr("data-lon"));
-  var radius = parseInt($('#distance-value').text()); //cal per raggio a 512 punti
+  var radius = parseInt($('#distance-value').text()); //cal per raggio a 128 punti
 
   var rad = 3.14159265359;
   var radLat = radius / 111.1896;
@@ -77805,9 +77917,9 @@ function generateCircleRadius(map) {
       },
       'layout': {},
       'paint': {
-        'fill-color': '#ff0054',
+        'fill-color': '#db356c',
         'fill-opacity': 0.13,
-        'fill-outline-color': '#000'
+        'fill-outline-color': '#db356c'
       }
     });
   });
@@ -77831,9 +77943,9 @@ function apiCallStatistics(startdate, enddate) {
         var labelsCharts = [];
         var dataCharts = [];
 
-        for (var _i2 = 0; _i2 < data[0].length; _i2++) {
-          labelsCharts.push(moment(data[0][_i2].date).format('L'));
-          dataCharts.push(data[0][_i2].views);
+        for (var i = 0; i < data[0].length; i++) {
+          labelsCharts.push(moment(data[0][i].date).format('L'));
+          dataCharts.push(data[0][i].views);
         }
 
         if (first) {
@@ -77867,7 +77979,7 @@ function generateChart(labels, data, totalviews) {
       datasets: [{
         label: 'Visualizzazioni Totali: ' + totalviews,
         data: data,
-        backgroundColor: poolColors(labels.length),
+        backgroundColor: dynamicColors(labels.length),
         borderWidth: 1
       }]
     },
@@ -77891,21 +78003,19 @@ function generateChart(labels, data, totalviews) {
   });
 }
 
-function poolColors(a) {
-  var pool = [];
+function dynamicColors(a) {
+  var data = [];
+  var m = 2;
 
-  for (i = 0; i < a; i++) {
-    pool.push(dynamicColors());
+  if (a < 10) {
+    m = 9;
   }
 
-  return pool;
-}
+  for (var index = 0; index < a; index++) {
+    data.push("rgba(" + (170 + m * index) + "," + (45 - m * index) + "," + (90 - m * index) + ", 0.73)");
+  }
 
-function dynamicColors() {
-  var r = Math.floor(Math.random() * 255);
-  var g = Math.floor(Math.random() * 255);
-  var b = Math.floor(Math.random() * 255);
-  return "rgba(" + r + "," + g + "," + b + ", 0.6)";
+  return data;
 }
 
 function addChartData(chart, label, data, totalviews) {
@@ -77913,7 +78023,7 @@ function addChartData(chart, label, data, totalviews) {
   chart.data.datasets.forEach(function (dataset) {
     dataset.label = 'Visualizzazioni Totali: ' + totalviews;
     dataset.data = data;
-    dataset.backgroundColor = poolColors(label.length);
+    dataset.backgroundColor = dynamicColors(label.length);
   });
   chart.update();
 }
@@ -77929,7 +78039,7 @@ function removeChartData(chart) {
 }
 
 function dataRangePickerGenerator() {
-  var start = moment();
+  var start = moment().subtract(29, 'days');
   var end = moment();
 
   function cb(start, end) {

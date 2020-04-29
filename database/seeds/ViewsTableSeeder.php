@@ -15,7 +15,7 @@ class ViewsTableSeeder extends Seeder
 	 */
 	public function run(Faker $faker)
 	{
-		for ($i=0; $i < 1000; $i++) { 
+		for ($i=0; $i < 1000; $i++) {
 			$view = new View;
 
 			$view->apartment_id = Apartment::inRandomOrder()->first()->id;

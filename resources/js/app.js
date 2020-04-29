@@ -4,38 +4,173 @@ var Chart = require('chart.js');
 var moment = require('moment');
 var daterangepicker = require("daterangepicker")
 
+// preload della pagina
+$(window).on('load', function() {
+	$('.preloader').delay(500).fadeOut(700);
+});
+
+// funzioni per Header
+// menu header scorrimento
+$(window).scroll(function() {
+	var scroll = $(window).scrollTop();
+	if (scroll >= 350) {
+		$(".top-header").addClass("fix");
+		$(".top-header").addClass("fade-in-top");
+		$(".top-header__wrapper").css("border-bottom", "none");
+	} else {
+		$(".top-header").removeClass("fix");
+		$(".top-header").removeClass("fade-in-top");
+	}
+});
+
 $(document).ready(function() {
-	moment.locale('it');
+moment.locale('it');
+
+	// cambio box checked in pagamenti
+
+	$('.payment-box-checked').on('change', function() {
+		if ($(this).parent().parent().hasClass("box-checked") == false) {
+			$(".left").find(".box-spec").removeClass("box-checked");
+			$(".box-spec").find("h4").removeClass("white-text");
+			$(".box-spec").parent().find("h2").removeClass("white-text");
+			$(this).parent().parent().addClass("box-checked");
+			$(this).parent().parent().find("h4").addClass("white-text");
+			$(this).parent().parent().find("h2").addClass("white-text");
+		}
+	});
+
+
+
+	viewMobileMenu($(".parent__drop-down"), $(".drop-down"), $(".close-menu"))
+	getWidth($(".drop-down"), $(".parent__drop-down"), $(".close-menu"))
+
+
+	viewMobileMenu($(".login-menu"), $(".login-menu__drop-down"), $(".close-login-menu"))
+	getWidth($(".login-menu__drop-down"), $(".login-menu"), $(".close-login-menu"))
+
+	toggleMenu($(".parent__drop-down"), $(".login-menu__drop-down"), $(".login-menu"), $(".close-login-menu"))
+	toggleMenu($(".login-menu"), $(".drop-down"), $(".parent__drop-down"), $(".close-menu"))
+
+	function toggleMenu(parent1, parent2, dropDown, closeMenu) {
+		parent1.click(
+			function() {
+				if (parent2.hasClass("active") == true) {
+					parent2.removeClass("active");
+					dropDown.removeClass("d-none");
+					closeMenu.addClass("d-none");
+				}
+			});
+	}
+
+	function viewMobileMenu(parent, dropMenu, closeMenu) {
+		parent.click(
+			function() {
+				dropMenu.addClass("active");
+				parent.addClass("d-none");
+				closeMenu.removeClass("d-none");
+
+			});
+		closeMenu.click(
+			function() {
+				dropMenu.removeClass("active");
+				parent.removeClass("d-none");
+				closeMenu.addClass("d-none");
+			})
+	}
+
+	// fine menu a tendina
+	function getWidth(drop, parentDrop, closeMenu) {
+		var width = $(window).width();
+		$(window).on('resize', function() {
+			if ($(this).width() !== width) {
+				width = $(this).width();
+				if (width > 1024) {
+					drop.removeClass("active");
+					parentDrop.removeClass("d-none");
+					closeMenu.addClass("d-none");
+				}
+			}
+		});
+	}
+
+	// ---------------
+	//-----------------------
+
+
+
+
+	function readURL(input) {
+		if (input.files && input.files[0]) {
+			var reader = new FileReader();
+
+			reader.onload = function(e) {
+				$('#blah').attr('src', e.target.result);
+			}
+
+			reader.readAsDataURL(input.files[0]);
+		}
+	}
+
+	$("#validatedCustomFile").change(function() {
+		readURL(this);
+	});
+
+
+
+	simulationCreateAppartment($("#bath-create"), $("#bath-append"));
+	simulationCreateAppartment($("#room-create"), $("#room-append"));
+	simulationCreateAppartment($("#mq-create"), $("#mq-append"));
+	simulationCreateAppartment($("#price"), $("#price-append"));
+	simulationCreateAppartment($("#address"), $("#address-append"));
+	simulationCreateAppartment($("#create-title"), $("#title-append"));
+
+	function simulationCreateAppartment(id, idAppend) {
+		id.on('keyup mouseup mousemove', function() {
+			var value = id.val();
+			idAppend.text(value);
+		});
+	}
+
+
+
+
+	// ---------------
+	//-----------------------
+	//-----------------------
+
+
+	// contatore visualizzazioni in show apartment
+	$('.count').each(function() {
+		$(this).prop('Counter', 0).animate({
+			Counter: $(this).text()
+		}, {
+			duration: 2000,
+			easing: 'swing',
+			step: function(now) {
+				$(this).text(Math.ceil(now));
+			}
+		});
+	});
+
 	// mappa
 	if ($('#map').length != 0) {
 		var ttMap = generateTomTomMap();
 		generateMarker(ttMap);
 		idCircle;
 	}
+
 	// datarangepicker statistics
 	if ($('#myChart').length != 0) {
-		dataRangePickerGenerator();
-		///////////////////////////////
-		apiCallStatistics(moment().format('L'), moment().format('L'), true);
-		///////////////////////////////
-		$('#reportrange').on('apply.daterangepicker', function (ev, picker) {
-			let start = $.trim(ev.target.outerText.split('-')[0]);
-			let end = $.trim(ev.target.outerText.split('-')[1]);
-			apiCallStatistics(start, end, false);
-		});
+	  dataRangePickerGenerator();
+	  ///////////////////////////////
+	  apiCallStatistics(moment().subtract(29, 'days').format('L'), moment().format('L'), true);
+	  ///////////////////////////////
+	  $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
+		let start = $.trim(ev.target.outerText.split('-')[0]);
+		let end = $.trim(ev.target.outerText.split('-')[1]);
+		apiCallStatistics(start, end, false);
+	  });
 	}
-	// contatore visualizzazioni in show apartment
-	$('.count').each(function () {
-		$(this).prop('Counter', 0).animate({
-			Counter: $(this).text()
-		}, {
-			duration: 2000,
-			easing: 'swing',
-			step: function (now) {
-				$(this).text(Math.ceil(now));
-			}
-		});
-	});
 	////////
 	var oldquery;
 	$("#address").keyup(function(event) {
@@ -44,8 +179,7 @@ $(document).ready(function() {
 		setTimeout(function() {
 			if (query == oldquery) {
 				$.ajax({
-					url:
-						"https://api.tomtom.com/search/2/search/" +
+					url: "https://api.tomtom.com/search/2/search/" +
 						query +
 						".json?",
 					method: "GET",
@@ -89,18 +223,18 @@ $(document).ready(function() {
 		$("#latitude").val($(this).data("latitude"));
 		$("#longitude").val($(this).data("longitude"));
 		$("#ricerca").removeAttr("disabled");
-		$("#ricerca").removeClass("btn-outline-secondary");
-		$("#ricerca").addClass("btn-success");
+		$("#ricerca").removeClass("search__btn-disabled");
+		$("#ricerca").addClass("search__btn");
 	});
-	$('#address').on('input', function () {
+	$('#address').on('input', function() {
 		$('#ricerca').prop('disabled', true);
-		$("#ricerca").addClass("btn-outline-secondary");
-		$("#ricerca").removeClass("btn-success");
+		$("#ricerca").addClass("search__btn-disabled");
+		$("#ricerca").removeClass("search__btn");
 	});
 	//////////////////////////////////////////////
 	// filtri
 	// cambio il valore del contatore stanze
-	$('#rooms_counter').on("click", function (e) {
+	$('#rooms_counter').on("click", function(e) {
 		var rooms_counter = parseInt($('#rooms_number').text());
 		if ($(e.target).hasClass("rooms_minus")) {
 			$(".rooms_plus").prop('disabled', false);
@@ -125,7 +259,7 @@ $(document).ready(function() {
 		}
 	});
 	// cambio il valore del contatore bagni
-	$('#baths_number').on("click", function (e) {
+	$('#baths_number').on("click", function(e) {
 		var baths_counter = parseInt($('#baths_counter').text());
 		if ($(e.target).hasClass("baths_minus")) {
 			$(".baths_plus").prop('disabled', false);
@@ -150,26 +284,25 @@ $(document).ready(function() {
 		}
 	});
 	// scrivo il raggio nel contatore e aggiorno la mappa
-	$("#distance").change(function () {
+	$("#distance").change(function() {
 		$('#distance-value').text($(this).val());
 		ttMap.removeLayer(idCircle);
 		generateCircleRadius(ttMap);
 	});
-	$(".change-filter").change(function () {
+	$(".change-filter").change(function() {
 		apiCallFilter(ttMap);
 	});
 	/////////////////////////////////////////
-	// cambio icona marker per apt in hover
-	$(".apartment").on({
-		mouseenter: function () {
-			var thisId = $(this).data('id');
-			$('.markerHome[data-id="' + thisId + '"]').addClass('selected-marker');
-		},
-		mouseleave: function () {
-			var thisId = $(this).data('id');
-			$('.markerHome[data-id="' + thisId + '"]').removeClass('selected-marker');
-		}
+	// cambio icona marker per app in hover
+	$(document).on('mouseenter', '.apartment', function () {
+		var thisId = $(this).data('id');
+		$('.markerHome[data-id="' + thisId + '"]').addClass('selected-marker');
 	});
+	$(document).on('mouseleave', '.apartment', function () {
+		var thisId = $(this).data('id');
+		$('.markerHome[data-id="' + thisId + '"]').removeClass('selected-marker');
+	});
+	//////////////////////////////////////
 });
 
 function generateTomTomMap() {
@@ -201,6 +334,7 @@ function generateMarker(map) {
 		});
 	} else {
 		for (let i = 0; i < $(".apartment").length; i++) {
+
 			apartmentArray.push({
 				'show': $(".apartment .imgdiv a")[i].getAttribute("href"),
 				'title': $(".apartment .image_home")[i].getAttribute('alt'),
@@ -216,7 +350,9 @@ function generateMarker(map) {
 		if (!isShow) {
 			element.setAttribute('data-id', apartment.show.split('/').reverse()[0]);
 		}
-		var marker = new tt.Marker({element: element}).setLngLat([apartment.longitude, apartment.latitude]).addTo(map);
+		var marker = new tt.Marker({
+			element: element
+		}).setLngLat([apartment.longitude, apartment.latitude]).addTo(map);
 		if (!isShow) {
 			var popupOffsets = {
 				top: [0, 0],
@@ -231,7 +367,9 @@ function generateMarker(map) {
 				"</b><img style='width:220px; background-size: cover;' src='" +
 				apartment.cover_img +
 				"'></div></a>";
-			var popup = new tt.Popup({ offset: popupOffsets }).setHTML(htmlApt);
+			var popup = new tt.Popup({
+				offset: popupOffsets
+			}).setHTML(htmlApt);
 			marker.setPopup(popup);
 		}
 	});
@@ -240,41 +378,47 @@ function generateMarker(map) {
 function apiCallFilter(map) {
 	var centerLat = parseFloat($("#map").attr("data-lat"));
 	var centerLon = parseFloat($("#map").attr("data-lon"));
-	var services_filter = $("input[type=checkbox]:checked.checkbox").map(function () { return $(this).val() }).get();
+	var services_filter = $("input[type=checkbox]:checked.checkbox").map(function() {
+		return $(this).val()
+	}).get();
 	var distance_filter = parseInt($("#distance").val());
 	var baths_counter = parseInt($('#baths_counter').text());
 	var rooms_counter = parseInt($('#rooms_number').text());
+	$("#apartments").empty();
+	$("div.messageResult").empty();
 	$.ajax({
-		url: location.origin + "/api/filtered",
+		url: "api/filtered",
 		method: "POST",
-		data: { 
-			'services': services_filter, 
+		data: {
+			'services': services_filter,
 			'baths': baths_counter,
 			'rooms': rooms_counter,
 			'distance': distance_filter,
 			'centerLongLat': [centerLon, centerLat],
 		},
 		dataType: "json",
-		success: function (data, message, xhr) {
+		success: function(data, message, xhr) {
 			if (xhr.status == 200) {
-				$("#apartments").empty();
-				$("div.messageResult").empty();
 				var template = Handlebars.compile($("#entry-template").html());
 				for (let index = 0; index < data.results.length; index++) {
-					$("#apartments").append(template(data.results[index]));
+				  if (data.results[index].sponsored) {
+					  $("#apartments").append(template(data.results[index]));
+				  }
+				}
+				for (let index = 0; index < data.results.length; index++) {
+				  if (!data.results[index].sponsored) {
+					  $("#apartments").append(template(data.results[index]));
+				  }
 				}
 				generateMarker(map);
 				if (!data.results.length) {
-					$("div.messageResult").empty();
 					$(".messageResult").append('<h2>La ricerca non ha prodotto risultati</h2>');
 				}
 			} else {
-				$("div.messageResult").empty();
 				$(".messageResult").append('<h2>Errore server APi</h2>');
 			}
 		},
-		error: function () {
-			$("div.messageResult").empty();
+		error: function() {
 			$(".messageResult").append('<h2>Impossibile effettuare la richiesta</h2>');
 		}
 	});
@@ -284,7 +428,7 @@ function generateCircleRadius(map) {
 	var centerLat = parseFloat($("#map").attr("data-lat"));
 	var centerLon = parseFloat($("#map").attr("data-lon"));
 	var radius = parseInt($('#distance-value').text());
-	//cal per raggio a 512 punti
+	//cal per raggio a 128 punti
 	var rad = 3.14159265359;
 	var radLat = radius / 111.1896;
 	var radLon = radius / 82.633;
@@ -294,7 +438,7 @@ function generateCircleRadius(map) {
 	for (let index = 0; index < 512; index++) {
 		coordinates.push([centerLon + radLon * Math.cos(rad * index / 256), centerLat + radLat * Math.sin(rad * index / 256)])
 	}
-	map.once('idle', function () {
+	map.once('idle', function() {
 		map.addLayer({
 			'id': idCircleTemp,
 			'type': 'fill',
@@ -310,13 +454,15 @@ function generateCircleRadius(map) {
 			},
 			'layout': {},
 			'paint': {
-				'fill-color': '#ff0054',
+				'fill-color': '#db356c',
 				'fill-opacity': 0.13,
-				'fill-outline-color': '#000'
+				'fill-outline-color': '#db356c'
 			}
 		});
 	});
 }
+
+
 
 function apiCallStatistics(startdate, enddate, first = false) {
 	var apartmentId = parseInt($("#apartment-id").attr("data-id"));
@@ -361,7 +507,7 @@ function generateChart(labels, data, totalviews) {
 			datasets: [{
 				label: 'Visualizzazioni Totali: ' + totalviews,
 				data: data,
-				backgroundColor: poolColors(labels.length),
+				backgroundColor: dynamicColors(labels.length),
 				borderWidth: 1
 			}]
 		},
@@ -385,19 +531,16 @@ function generateChart(labels, data, totalviews) {
 	});
 }
 
-function poolColors(a) {
-	var pool = [];
-	for (i = 0; i < a; i++) {
-		pool.push(dynamicColors());
+function dynamicColors(a) {
+	var data = [];
+	var m = 2;
+	if (a < 10) {
+		m = 9;
 	}
-	return pool;
-}
-
-function dynamicColors() {
-	var r = Math.floor(Math.random() * 255);
-	var g = Math.floor(Math.random() * 255);
-	var b = Math.floor(Math.random() * 255);
-	return "rgba(" + r + "," + g + "," + b + ", 0.6)";
+	for (let index = 0; index < a; index++) {
+		data.push("rgba(" + (170 + (m * index)) + "," + (45 - (m * index)) + "," + (90 - (m * index)) + ", 0.73)")
+	}
+	return data;
 }
 
 function addChartData(chart, label, data, totalviews) {
@@ -405,7 +548,7 @@ function addChartData(chart, label, data, totalviews) {
 	chart.data.datasets.forEach((dataset) => {
 		dataset.label = 'Visualizzazioni Totali: ' + totalviews;
 		dataset.data = data;
-		dataset.backgroundColor = poolColors(label.length);
+		dataset.backgroundColor = dynamicColors(label.length);
 	});
 	chart.update();
 }
@@ -421,7 +564,7 @@ function removeChartData(chart) {
 }
 
 function dataRangePickerGenerator() {
-	var start = moment();
+	var start = moment().subtract(29, 'days');
 	var end = moment();
 	function cb(start, end) {
 		$('#reportrange span').html(start.format('L') + ' - ' + end.format('L'));

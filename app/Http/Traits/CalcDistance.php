@@ -16,4 +16,15 @@ trait CalcDistance
 			return $km;
 		}
 	}
+	function DistanceFilter($arrayApartments, $dataLat, $dataLon)
+	{
+		$apartmentsInRadius = [];
+		foreach ($arrayApartments as  $apartment) {
+			$km = $this->CalcDistance($dataLat, $dataLon, $apartment->latitude, $apartment->longitude);
+			if ($km <= 20) {
+				$apartmentsInRadius[] = $apartment;
+			}
+		}
+		return $apartmentsInRadius;
+	}
 }

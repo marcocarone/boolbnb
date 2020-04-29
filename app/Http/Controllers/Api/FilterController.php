@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Apartment;
+use App\ApartmentPackage;
 use App\Service;
+use Carbon\Carbon;
 use App\Http\Traits\CalcDistance;
 
 class FilterController extends Controller
@@ -80,6 +82,20 @@ class FilterController extends Controller
 		}
 
 		$apartamentsFiltered = $apartmentsBaths;
+
+		$allApartmentPackage = ApartmentPackage::all();
+		$sponsoredApartments = [];
+		foreach ($allApartmentPackage as $apartmentpkg) {
+			if (Carbon::parse($apartmentpkg->start)->lt(Carbon::now()) && Carbon::parse($apartmentpkg->end)->gt(Carbon::now())) {
+				$sponsoredApartments[] = $apartmentpkg->apartment_id;
+			}
+		}
+
+		foreach ($apartamentsFiltered as $apartamentFiltered) {
+			if (in_array($apartamentFiltered["id"], $sponsoredApartments )) {
+				$apartamentFiltered["sponsored"] = true;
+			}
+		}
 
 		return response()->json([
 			'results' => $apartamentsFiltered,

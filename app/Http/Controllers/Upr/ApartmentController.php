@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\upr;
 
-use App\Http\Traits\GetViews;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Apartment;
 use App\Service;
 use App\Image;
 use App\View;
+use App\Http\Traits\GetViews;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -48,10 +48,10 @@ class ApartmentController extends Controller
 		$data = $request->all();
 
 		if (empty($data["cover_img"])) {
-			$path = null;
-		} else {
-			$path = Storage::disk('public')->put('images', $data['cover_img']);
-		}
+            $path = 'storage/images/asset/nophoto.png';
+        } else {
+            $path = 'storage/' . Storage::disk('public')->put('images', $data['cover_img']);
+        }
 
 		$idUser = Auth::user()->id;
 		$request->validate([
@@ -78,7 +78,7 @@ class ApartmentController extends Controller
 		$newApartment->longitude = $data['longitude'];
 		$newApartment->price = $data['price'];
 		$newApartment->user_id = $idUser;
-		$newApartment->cover_img = 'storage/' . $path;
+		$newApartment->cover_img = $path;
 
 		$saved = $newApartment->save();
 		$apartmentId = $newApartment->id;
@@ -105,17 +105,17 @@ class ApartmentController extends Controller
 		if (empty($apartment)) {
 			abort('404');
 		}
-
 		$idUser = Auth::user()->id;
 		if ($apartment->user->id != $idUser) {
 			return redirect()->route('apartment.show', $apartment);
-		}
+			}
 
-		$data = [
-			'apartment' => $apartment,
-			'views' => $this->GetViews($apartment->id)
-		];
-		return view('upr.apartments.show', $data);
+
+			$data = [
+				'apartment' => $apartment,
+				'views' => $this->GetViews($apartment->id)
+			];
+			return view('upr.apartments.show', $data);
 	}
 
 	public function show2(Apartment $apartment)
@@ -147,15 +147,13 @@ class ApartmentController extends Controller
 	 */
 	public function edit(Apartment $apartment)
 	{
-
 		$idUser = Auth::user()->id;
 		if (empty($apartment)) {
-			abort(400);
+			abort('400');
 		}
-
 		if ($apartment->user->id != $idUser) {
-			abort(401);
-		}
+					abort(401);
+				}
 
 		$services = Service::all();
 		$data = [
@@ -175,11 +173,11 @@ class ApartmentController extends Controller
 	public function update(Request $request, Apartment $apartment)
 	{
 		$data = $request->all();
-		if (empty($data["cover_img"])) {
-			$path = $apartment->cover_img;
-		} else {
-			$path = Storage::disk('public')->put('images', $data['cover_img']);
+		if (!empty($data["cover_img"])) {
+			$path = 'storage/' . Storage::disk('public')->put('images', $data['cover_img']);
+			$apartment->cover_img = $path;
 		}
+
 
 		$idUser = Auth::user()->id;
 		if (empty($apartment)) {
@@ -212,9 +210,6 @@ class ApartmentController extends Controller
 		$apartment->longitude = $data['longitude'];
 		$apartment->active = $data['active'];
 		$apartment->price = $data['price'];
-
-		$apartment->cover_img = 'storage/' . $path;
-
 		$updated = $apartment->update();
 
 		if (!$updated) {
@@ -249,17 +244,18 @@ class ApartmentController extends Controller
 		return redirect()->route('upr.apartments.index');
 	}
 
+
 	public function statistics(Apartment $apartment)
 	{
 		$idUser = Auth::user()->id;
 		if (empty($apartment)) {
-			abort(400);
+			return redirect()->route('home');
 		}
 
 		if ($apartment->user->id != $idUser) {
 			abort(401);
 		}
-		
+
 		return view('upr.apartments.statistics', compact('apartment'));
 	}
 }
