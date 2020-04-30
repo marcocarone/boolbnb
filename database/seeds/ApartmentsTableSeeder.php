@@ -3,6 +3,7 @@
 use App\Apartment;
 use App\Service;
 use App\User;
+use App\Image;
 use Faker\Generator as Faker;
 use Illuminate\Database\Seeder;
 
@@ -36,7 +37,11 @@ class ApartmentsTableSeeder extends Seeder
 				'Appartamento moderno, Torino Centro.',
 				'Nel Cuore del Barocco Leccese',
 				'Appartamento Adriana- Lecce',
-				'La Piccola Corte- Lecce'
+				'La Piccola Corte- Lecce',
+				'Appartamento in villa indipendente - Velletri',
+				'La Casa Del Gatto Blu, EUR Centro.. - Roma',
+				'CentralHouse in Cagliari'
+
 			],
 			'description' => [
 				'Marco e Laura B & BConfortevoli e accoglienti, tutte con servizi privati e situate al piano terra e al secondo piano.La struttura è composta da diverse stanze, tra cui camere doppie e singole (con letto aggiunto).Il B & B ha due ingressi, uno da Via Aurelia (vicino alle mura vaticane), l\'altro da Via Innocenzo XIII.Tutte le camere sono dotate di asciugacapelli, aria condizionata e riscaldamento e tv. Tutte le camere sono dotate di bagno privato con doccia, parete TV al plasma, asciugacapelli e aria condizionata e riscaldamento. Una di queste camere ha un balcone.',
@@ -58,7 +63,11 @@ class ApartmentsTableSeeder extends Seeder
 				'A pochi passi dalla stazione Porta Nuova un bellissimo e accogliente appartamento in un palazzo storico nel cuore della città di Torino.Dotato di divano-letto, cucina attrezzata, Smart TV HD da 47 pollici, internet wi-fi, bagno con doccia. Ottima vicinanza e accessibilità a svariati servizi quali metro, ristoranti, negozi ecc.',
 				'Abitazione si trova di fronte la bellissima Villa Reale (con vista dal balcone), tra Porta Rudie e porta Napoli 2 tra le principali vie d\'accesso al centro storico e a soli 5 min dal Duomo di Lecce, dalla chiesa di Santa Croce e dai più famosi monumenti storici della città . Casa indipendente e di recente ristrutturazione.Nonostante si trovi alle porte del centro storico, è assicurata la privacy e la tranquillità.Facilmente raggiungibile per chi arriva in macchina da Brindisi e a 5 min a piedi dalla fermata del bus-navetta che collega la città con l\'aereoporto.',
 				'Appartamento di nuova costruzione, ideale per due persone, luminosissimo e dotato di tutti i confort, è l\'ideale per soggiorni sia brevi che medio lunghi.Si trova a 10 minuti dal centro di Lecce e a 10 minuti dall\'imbocco della tangenziale.',
-				'Uno spazio elegante per una vacanza romantica a Lecce! a pochi passi dalla strada principale della città, l\'appartamento si trova in un cortile tranquillo e tipico nel cuore del centro storico; Ha una grande terrazza e una piccola area esterna.L\'appartamento è un vecchio edificio recentemente ristrutturato giocando tra elementi tradizionali e colori contemporanei, dotato di comfort moderni.'
+				'Uno spazio elegante per una vacanza romantica a Lecce! a pochi passi dalla strada principale della città, l\'appartamento si trova in un cortile tranquillo e tipico nel cuore del centro storico; Ha una grande terrazza e una piccola area esterna.L\'appartamento è un vecchio edificio recentemente ristrutturato giocando tra elementi tradizionali e colori contemporanei, dotato di comfort moderni.',
+				'Immerso nel verde in zona silenziosissima, vicino ai grandi Outlet di Castel Romano e Valmontone (ca. 30 min).
+				La struttura dista inoltre 30 min dal Parco attrazioni Rainbow Magicland, raggiungibile anche con auto dei proprietari (possibilità di affitto dell\'auto). A 15 min di strada è presente il Parco naturale di Ninfa e il paese medioevale di Sermoneta dove si può visitare il Castello Caetani, la zona dei laghi vulcanici (Castelgandolfo, Rocca di Papa,Nemi) e l\'Abbazia bizantina millenaria di Grottaferrata. A 15-20 min dal mare (Nettuno e Anzio).',
+				'Appartamento centralissimo all\'EUR, in palazzina signorile, a due passi da tutte le comodità. Salotto con divano e tavolo per mangiare, una grande camera matrimoniale, una grande camera con un letto singolo con possibilità di aggiungere un secondo letto. Una cameretta con una scrivania per poter lavorare e un bagno con vasca, doccia e doppi lavandini.',
+				'The apartment boasts an enviable central location in the heart of the historic "La Marina" of Cagliari, 150 meters from the Via Roma and the harbour, bus and train station and main shops. A 10-minute bus ride from the beautiful beach of Poetto. Outdoor restaurants, pubs,supermarket,ice cream parlour,bakeries artigianiali, rent bikes ... a few steps! The house is clean ( we reserve a particular attention to the cleaning) and recently (email hidden) has 2 double fully furnished rooms, each equipped with INTERNET WIFI.. LCD TV, temperature controlled, open space kitchen with an other flat TV on the wall and two comfortable chairs for relaxation. The kitchen is fully equipped with washing machine, bathroom with shower and terrace. Guests sheets, towels,beach towels and bag for the beach. Benvenuti! :-)'
 			],
 			'address' => [
 				'Via Orazio, 10 - Roma',
@@ -80,7 +89,10 @@ class ApartmentsTableSeeder extends Seeder
 				'Via Carlo Alberto, 3 - Torino',
 				'Via Principi di Savoia, 3, Lecce',
 				'Via Marco terenzio Varrone, 3 - Lecce',
-				'Via Alessandro Volta Sn, -Lecce'
+				'Via Alessandro Volta Sn, -Lecce',
+				'Via Regina Margherita, 12A - Velletri',
+				'Viale America, 3 - Roma',
+				'Via Sicilia, 27 - Cagliari'
 			],
 			'cover_img' => [
 				'storage/images/seed/001.jpeg',
@@ -103,6 +115,9 @@ class ApartmentsTableSeeder extends Seeder
 				'storage/images/seed/021.jpeg',
 				'storage/images/seed/012.jpeg',
 				'storage/images/seed/001.jpeg',
+				'storage/images/seed/019.jpg',
+				'storage/images/seed/023.jpg',
+				'storage/images/seed/027.jpg',
 
 			],
 			'latitude' => [
@@ -126,6 +141,9 @@ class ApartmentsTableSeeder extends Seeder
 				'40.35634',
 				'40.37829',
 				'40.34407',
+				'41.68436',
+				'41.83174',
+				'39.21527'
 			],
 			'longitude' => [
 				'12.46627',
@@ -148,9 +166,12 @@ class ApartmentsTableSeeder extends Seeder
 				'18.16899',
 				'18.19314',
 				'18.14203',
+				'12.77852',
+				'12.46161',
+				'9.11305'
 			],
 		];
-		for ($i = 0; $i < 20; $i++) {
+		for ($i = 0; $i < 23; $i++) {
 			$apartment = new Apartment;
 			$apartment->user_id = User::inRandomOrder()->first()->id;
 			$apartment->title = $apartmentTemplate['title'][$i];
@@ -165,6 +186,20 @@ class ApartmentsTableSeeder extends Seeder
 			$apartment->cover_img = $apartmentTemplate['cover_img'][$i];
 			$apartment->active = 1;
 			$apartment->save();
+			if ($i == 21) {
+				$images24 = new Image;
+				$images24->apartment_id = $apartment->id;
+				$images24->img_path = '024.jpg';
+				$images24->save();
+				$images25 = new Image;
+				$images25->apartment_id = $apartment->id;
+				$images25->img_path = '025.jpg';
+				$images25->save();
+				$images26 = new Image;
+				$images26->apartment_id = $apartment->id;
+				$images26->img_path = '026.jpg';
+				$images26->save();
+			}
 			$services = Service::all();
 			for ($x = 0; $x < rand(0, 11); $x++) {
 				unset($services[rand(1, count($services))]);
