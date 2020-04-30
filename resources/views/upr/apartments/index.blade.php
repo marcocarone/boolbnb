@@ -42,7 +42,7 @@
                                 Azioni
                             </button>
                             <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item" href="{{route("upr.apartments.show", $apartment)}}">Modifica</a>
+                                <a class="dropdown-item" href="{{route("upr.apartments.show", $apartment)}}">Visualizza</a>
                                 <form action="{{route("upr.apartment.statistics", $apartment)}}" method="post">
                     							@csrf
                     							@method('POST')

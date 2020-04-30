@@ -124,11 +124,7 @@
 
 
         <div class="right ">
-
-            @if ( $apartment->user->id !== Auth::id())
             <div class="form-box show-sticky">
-
-
                 <div class="card-body">
                     <h3>Richiedi informazioni</h3>
                     <form action="{{(Auth::user()) ? route('upr.message.store') : route('guest.message.store')}}" method="post">
@@ -140,11 +136,9 @@
                               aria-describedby="emailHelp">
                             <label for="message">Messaggio</label>
                             <textarea class="form-control" name="message" required minlength="10" maxlength="700" id="message" cols="30" rows="10"></textarea>
-
                         </div>
                         <input type="hidden" name="apartment_id" value="{{$apartment->id}}">
                         <button class="form__btn " type="submit">Invia</button>
-
                     </form>
                     @if (session('status'))
                     <div class="alert alert-success">
@@ -152,12 +146,7 @@
                     </div>
                     @endif
                 </div>
-
             </div>
-
-            @else
-              <h3>Questo appartamento è tuo</h3>
-            @endif
         </div>
 
 

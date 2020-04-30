@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use App\Apartment;
 use App\ApartmentPackage;
 use Illuminate\Http\Request;
@@ -27,7 +28,11 @@ class ApartmentController extends Controller
 		}
 		$advApt = Apartment::where('active', '1')->whereIn('id', $sponsoredApartments)->latest()->get();
 		$noAdvApt = Apartment::where('active', '1')->whereNotIn('id', $sponsoredApartments)->latest()->get();
-		$data = ['advApt' => $advApt, 'noAdvApt' => $noAdvApt];
+		$data = [
+			'advApt' => $advApt, 
+			'noAdvApt' => $noAdvApt
+			];
+
 		return view('home', $data);
 	}
 
@@ -42,6 +47,13 @@ class ApartmentController extends Controller
 		if (empty($apartment)) {
 			abort('400');
 		}
+
+		if (!empty(Auth::user()->id)) {
+			if ($apartment->user->id == Auth::user()->id) {
+				return redirect()->route('upr.apartments.show', $apartment);
+			}
+		}
+
 		$searchIp = View::where('ip', $request->ip())->latest()->first();
 		if (empty($searchIp) || Carbon::parse($searchIp->created_at)->lt(Carbon::now()->subMinutes(10))) {
 			$view = new View;

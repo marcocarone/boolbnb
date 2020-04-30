@@ -77480,7 +77480,7 @@ $(window).on('load', function () {
 $(window).scroll(function () {
   var scroll = $(window).scrollTop();
 
-  if (scroll >= 350) {
+  if (scroll >= 250) {
     $(".top-header").addClass("fix");
     $(".top-header").addClass("fade-in-top");
     $(".top-header__wrapper").css("border-bottom", "none");
@@ -77754,15 +77754,13 @@ $(document).ready(function () {
   }); /////////////////////////////////////////
   // cambio icona marker per app in hover
 
-  $(".apartment").on({
-    mouseenter: function mouseenter() {
-      var thisId = $(this).data('id');
-      $('.markerHome[data-id="' + thisId + '"]').addClass('selected-marker');
-    },
-    mouseleave: function mouseleave() {
-      var thisId = $(this).data('id');
-      $('.markerHome[data-id="' + thisId + '"]').removeClass('selected-marker');
-    }
+  $(document).on('mouseenter', '.apartment', function () {
+    var thisId = $(this).data('id');
+    $('.markerHome[data-id="' + thisId + '"]').addClass('selected-marker');
+  });
+  $(document).on('mouseleave', '.apartment', function () {
+    var thisId = $(this).data('id');
+    $('.markerHome[data-id="' + thisId + '"]').removeClass('selected-marker');
   }); //////////////////////////////////////
 });
 
@@ -77843,6 +77841,8 @@ function apiCallFilter(map) {
   var distance_filter = parseInt($("#distance").val());
   var baths_counter = parseInt($('#baths_counter').text());
   var rooms_counter = parseInt($('#rooms_number').text());
+  $("#apartments").empty();
+  $("div.messageResult").empty();
   $.ajax({
     url: "api/filtered",
     method: "POST",
@@ -77856,8 +77856,6 @@ function apiCallFilter(map) {
     dataType: "json",
     success: function success(data, message, xhr) {
       if (xhr.status == 200) {
-        $("#apartments").empty();
-        $("div.messageResult").empty();
         var template = Handlebars.compile($("#entry-template").html());
 
         for (var index = 0; index < data.results.length; index++) {
@@ -77875,16 +77873,13 @@ function apiCallFilter(map) {
         generateMarker(map);
 
         if (!data.results.length) {
-          $("div.messageResult").empty();
           $(".messageResult").append('<h2>La ricerca non ha prodotto risultati</h2>');
         }
       } else {
-        $("div.messageResult").empty();
         $(".messageResult").append('<h2>Errore server APi</h2>');
       }
     },
     error: function error() {
-      $("div.messageResult").empty();
       $(".messageResult").append('<h2>Impossibile effettuare la richiesta</h2>');
     }
   });

@@ -173,11 +173,11 @@ class ApartmentController extends Controller
 	public function update(Request $request, Apartment $apartment)
 	{
 		$data = $request->all();
-		if (empty($data["cover_img"])) {
-			$path = $apartment->cover_img;
-		} else {
-			$path = Storage::disk('public')->put('images', $data['cover_img']);
+		if (!empty($data["cover_img"])) {
+			$path = 'storage/' . Storage::disk('public')->put('images', $data['cover_img']);
+			$apartment->cover_img = $path;
 		}
+
 
 		$idUser = Auth::user()->id;
 		if (empty($apartment)) {
@@ -210,9 +210,6 @@ class ApartmentController extends Controller
 		$apartment->longitude = $data['longitude'];
 		$apartment->active = $data['active'];
 		$apartment->price = $data['price'];
-
-		$apartment->cover_img = 'storage/' . $path;
-
 		$updated = $apartment->update();
 
 		if (!$updated) {

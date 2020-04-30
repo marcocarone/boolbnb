@@ -55,7 +55,7 @@
 
 		<div class="range-filter">
 			<label for="distance">Raggio di ricerca <strong id="distance-value">20</strong> Km</label>
-			<input type="range" class="custom-range change-filter" min="20" max="100" step="1" value="20" id="distance">
+			<input type="range" class="custom-range change-filter" min="20" max="100" step="5" value="20" id="distance">
 		</div>
 
 
