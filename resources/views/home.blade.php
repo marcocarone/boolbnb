@@ -19,7 +19,7 @@
 		<div class="prova01">
 			@csrf
 			@method('POST')
-			<input id="address" class="form-control @error("address") is-invalid @enderror" placeholder="Cerca per città o per indirizzo" type="text" name="address" autocomplete="off" required minlength="4" maxlength="255">
+			<input id="address" class="address form-control @error("address") is-invalid @enderror" placeholder="Cerca per città o per indirizzo" type="text" name="address" autocomplete="off" required minlength="4" maxlength="255">
 				@error("address")
 					<span class="invalid-feedback d-block" role="alert">
 						<strong>{{ $message }}</strong>

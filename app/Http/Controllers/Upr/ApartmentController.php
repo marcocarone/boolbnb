@@ -33,8 +33,8 @@ class ApartmentController extends Controller
 	 */
 	public function create()
 	{
-		$services = Service::all();
-		return view('upr.apartments.create', compact("services"));
+		$allServices = Service::all();
+		return view('upr.apartments.create', compact("allServices"));
 	}
 
 	/**
@@ -48,12 +48,13 @@ class ApartmentController extends Controller
 		$data = $request->all();
 
 		if (empty($data["cover_img"])) {
-            $path = 'storage/images/asset/nophoto.png';
-        } else {
-            $path = 'storage/' . Storage::disk('public')->put('images', $data['cover_img']);
-        }
+      $path = 'storage/images/asset/nophoto.png';
+    } else {
+      $path = 'storage/' . Storage::disk('public')->put('images', $data['cover_img']);
+    }
 
 		$idUser = Auth::user()->id;
+
 		$request->validate([
 			'title' => 'string|max:70',
 			'description' => 'string|nullable|max:2000',
@@ -63,8 +64,11 @@ class ApartmentController extends Controller
 			'address' => 'string|required|max:110',
 			'price' => 'numeric|required|min:0|max:9999',
 			'active' => 'required|boolean',
-			'cover_img' => 'image|nullable'
+			'cover_img' => 'image|nullable',
+			'latitude' => 'required',
 		]);
+
+
 
 		$newApartment = new Apartment;
 
