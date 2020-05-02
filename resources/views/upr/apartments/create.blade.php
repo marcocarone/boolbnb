@@ -22,6 +22,24 @@
 
 {{-- ---- --}}
 
+  @if ($errors->any())
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xl-12">
+          <div class="alert alert-warning">
+            @foreach ($errors->all() as $key => $error)
+              @if ($key == "latitude")
+                <p>{{"Inserisci l'indirizzo scegliendo una voce dal menu a tendina"}}</p>
+              @elseif ($key == "longitude")
+              @else
+                <p>{{$error}}</p>
+              @endif
+            @endforeach
+          </div>
+        </div>
+      </div>
+    </div>
+  @endIf
 
 <div class="ap-create-show__content">
     <div class="wrapper">
@@ -32,7 +50,7 @@
 
 						<div class="box">
 								<label  class="title" for="title">Titolo</label>
-								<input id="create-title" class="form-control @error("title") is-invalid @enderror" type="text" name="title"  required minlength="4" maxlength="70">
+								<input id="create-title" class="form-control @error("title") is-invalid @enderror" type="text" name="title" value="{{old("title")}}" required minlength="4" maxlength="70">
 								@error("title")
 									<span class="invalid-feedback" role="alert">
 										<strong>{{ $message }}</strong>
@@ -42,7 +60,7 @@
 
 						<div class="box">
 							<label class="title"  for="description">Descrizione</label>
-							<textarea class="form-control @error("description") is-invalid @enderror" name="description"  maxlength="2000" id="description" cols="30" rows="10"></textarea>
+							<textarea class="form-control  @error("description") is-invalid @enderror" name="description"  maxlength="2000" id="description" cols="30" rows="10" > {{old("description")}} </textarea>
 							@error("description")
 								<span class="invalid-feedback" role="alert">
 									<strong>{{ $message }}</strong>
@@ -66,7 +84,7 @@
                           d="m486.410156 298.683594h-25.601562v-85.332032c-.027344-23.554687-19.113282-42.640624-42.667969-42.667968h-136.53125c-23.554687.027344-42.640625 19.113281-42.667969 42.667968v85.332032h-25.601562c-14.128906.015625-25.582032 11.46875-25.597656 25.601562v85.332032c.066406 22.457031 17.550781 41.003906 39.964843 42.394531l-12.269531 42.9375h-79.757812c-4.082032-19.847657-21.539063-34.105469-41.804688-34.132813h-17.066406v-392.875c.011718-26.691406 20.644531-48.835937 47.269531-50.726562s50.183594 17.113281 53.96875 43.535156l.148437 1.035156c-11.011718 4.535156-17.40625 16.097656-15.390624 27.832032l2.328124 13.777343-22.816406 39.183594c-3.066406 5.269531-3.089844 11.773437-.066406 17.066406 3.027344 5.292969 8.648438 8.570313 14.746094 8.597657.976562 0 1.953125-.082032 2.914062-.246094l81.867188-13.835938c6.527344-1.105468 11.828125-5.886718 13.601562-12.265625 1.769532-6.378906-.308594-13.207031-5.335937-17.515625l-34.425781-29.511718-2.328126-13.777344c-1.652343-9.605469-8.628906-17.433594-17.980468-20.179688l-.367188-2.574218c-5.042968-35.296876-36.511718-60.691407-72.074218-58.164063s-63.125 32.117187-63.125 67.769531v392.875h-17.066407v-8.53125c0-4.714844-3.820312-8.535156-8.535156-8.535156-4.710937 0-8.53125 3.820312-8.53125 8.535156v12.148438c-15.527344 6.785156-25.5703125 22.105468-25.6015625 39.050781 0 4.710937 3.8203125 8.53125 8.5351565 8.53125h494.933593c4.710938 0 8.53125-3.820313 8.53125-8.53125 0-4.714844-3.820312-8.535156-8.53125-8.535156h-19.164062l-12.269531-42.9375c22.414062-1.390625 39.898437-19.9375 39.964843-42.394531v-85.332032c-.015624-14.132812-11.46875-25.585937-25.597656-25.601562zm-247.476562-161.351563-81.867188 13.839844 22.359375-38.398437 25.777344-4.355469 33.792969 28.898437zm-41.046875-44.988281-16.828125 2.84375-1.425782-8.414062c-.777343-4.644532 2.347657-9.042969 6.992188-9.835938.472656-.078125.949219-.117188 1.429688-.117188 4.160156.007813 7.710937 3.007813 8.414062 7.109376zm83.722656 95.40625h136.53125c14.132813.015625 25.585937 11.46875 25.601563 25.601562v86.90625c-10.199219 3.589844-17.035157 13.210938-17.066407 24.027344v17.285156c-7.34375-5.644531-16.339843-8.722656-25.601562-8.753906h-30.597657l19.566407-19.566406c3.230469-3.347656 3.1875-8.671875-.105469-11.960938-3.292969-3.292968-8.613281-3.339843-11.960938-.105468l-19.566406 19.566406v-39.132812c0-4.714844-3.824218-8.535157-8.535156-8.535157s-8.535156 3.820313-8.535156 8.535157v39.132812l-19.566406-19.566406c-3.347657-3.234375-8.667969-3.1875-11.960938.105468-3.292969 3.289063-3.335938 8.613282-.105469 11.960938l19.566407 19.566406h-30.597657c-9.261719.03125-18.257812 3.109375-25.601562 8.753906v-17.285156c-.03125-10.816406-6.867188-20.4375-17.066407-24.027344v-86.90625c.015626-14.132812 11.46875-25.585937 25.601563-25.601562zm119.464844 162.132812c14.132812.015626 25.585937 11.46875 25.601562 25.601563v8.53125h-153.601562v-8.53125c.015625-14.132813 11.46875-25.585937 25.601562-25.601563zm12.117187 102.402344 24.382813 42.664063h-175.394531l24.378906-42.664063zm13.484375-17.070312h-153.601562v-34.132813h153.601562zm-221.867187-25.597656v-85.332032c.003906-4.710937 3.824218-8.527344 8.53125-8.535156h34.136718c4.707032.007812 8.527344 3.824219 8.53125 8.535156v110.929688h-25.597656c-14.132812-.015625-25.585937-11.464844-25.601562-25.597656zm-186.269532 85.332031c3.625-10.21875 13.289063-17.054688 24.136719-17.066407h51.199219c10.84375.011719 20.511719 6.847657 24.136719 17.066407zm214.648438 0 12.191406-42.664063h21.527344l-24.378906 42.664063zm224.035156 0-24.378906-42.664063h21.527344l12.191406 42.664063zm37.71875-85.332031c-.015625 14.132812-11.46875 25.582031-25.601562 25.597656h-25.597656v-110.929688c.003906-4.710937 3.824218-8.527344 8.53125-8.535156h34.136718c4.707032.007812 8.523438 3.824219 8.53125 8.535156zm0 0" />
                     </svg>
                     <h4>Stanze</h4>
-										<input  id="room-create" class="form-control @error("n_rooms") is-invalid @enderror" type="number" name="n_rooms" required min="1" max="100">
+										<input  id="room-create" class="form-control @error("n_rooms") is-invalid @enderror" type="number" name="n_rooms" required min="1" max="100" value="{{old("n_rooms")}}">
 										@error("n_rooms")
 											<span class="invalid-feedback d-block" role="alert">
 												<strong>{{ $message }}</strong>
@@ -93,7 +111,7 @@
                         </g>
                     </svg>
                     <h4>Bagni</h4>
-										<input id="bath-create" class="form-control @error("n_baths") is-invalid @enderror" type="number" name="n_baths" required min="1" max="10">
+										<input id="bath-create" class="form-control @error("n_baths") is-invalid @enderror" type="number" name="n_baths" required min="1" max="10" value="{{old("n_baths")}}">
 										@error("n_baths")
 											<span class="invalid-feedback d-block" role="alert">
 												<strong>{{ $message }}</strong>
@@ -112,7 +130,7 @@
                         </g>
                     </svg>
                     <h4>Mq</h4>
-										<input id="mq-create" class="form-control @error("sq_meters") is-invalid @enderror" type="number" name="sq_meters" required min="10" max="2000">
+										<input id="mq-create" class="form-control @error("sq_meters") is-invalid @enderror" type="number" name="sq_meters" required min="10" max="2000" value="{{old("sq_meters")}}">
 										@error("sq_meters")
 											<span class="invalid-feedback d-block" role="alert">
 												<strong>{{ $message }}</strong>
@@ -123,7 +141,7 @@
 
 						<div class="box">
 							<label class="title" for="address">Indirizzo</label>
-							<input id="address" class="form-control @error("address") is-invalid @enderror" type="text" name="address" autocomplete="off" required minlength="4" maxlength="255">
+							<input id="address" class="form-control @error("address") is-invalid @enderror" type="text" name="address" autocomplete="off" required minlength="4" maxlength="255" value="{{old("address")}}">
 							@error("address")
 								<span class="invalid-feedback d-block" role="alert">
 									<strong>{{ $message }}</strong>
@@ -132,13 +150,13 @@
 							<div class="dropdown-address hidden">
 								<ul class="list-unstyled "></ul>
 							</div>
-							<input type="hidden" id="latitude" name="latitude" value="">
-							<input type="hidden" id="longitude" name="longitude" value="">
+							<input type="hidden" id="latitude" name="latitude" value="{{old("latitude")}}">
+							<input type="hidden" id="longitude" name="longitude" value="{{old("longitude")}}">
 						</div>
 
 						<div class="box">
 							<label class="title" for="price">Prezzo</label>
-							<input id="price" class="form-control @error("price") is-invalid @enderror" type="number" name="price" required>
+							<input id="price" class="form-control @error("price") is-invalid @enderror" type="number" name="price" value="{{old("price")}}" required>
 							@error("price")
 								<span class="invalid-feedback d-block" role="alert">
 									<strong>{{ $message }}</strong>
@@ -150,16 +168,21 @@
 							<label class="title" for="active">Visibilità</label>
 							<select name="active" class="custom-select mr-sm-2">
 								<option value="0">Non visibile</option>
-								<option value="1">Visibile</option>
+								<option value="1" {{(old("active") == 1) ? 'selected' : ''}} >Visibile</option>
 							</select>
 						</div>
 						<div class="box">
 								<label class="title" for="services">Servizi</label>
 								<div class="box-service">
-										@foreach ($services as $service)
+
+										@foreach ($allServices as $service)
 										<div class="service">
 											<div class="pretty p-default  p-round p-fill ">
-												<input type="checkbox" name="services[]" value="{{$service->id}}">
+												<input type="checkbox" name="services[]" value="{{$service->id}}"
+                        @if (old("services"))
+                          {{(in_array($service->id, old("services"))) ? 'checked' : ''}}
+                        @endif
+                        >
 												<div class="state p-primary">
 								            <label>{{$service->title}}</label>
 								        </div>

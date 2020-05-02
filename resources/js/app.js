@@ -405,6 +405,7 @@ function apiCallFilter(map) {
 					  $("#apartments").append(template(data.results[index]));
 				  }
 				}
+
 				for (let index = 0; index < data.results.length; index++) {
 				  if (!data.results[index].sponsored) {
 					  $("#apartments").append(template(data.results[index]));
