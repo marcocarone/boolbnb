@@ -203,9 +203,12 @@ moment.locale('it');
 							});
 						}
 						$(".dropdown-address ul").html("");
-						$(".dropdown-address").removeClass("hidden");
+						$(".dropdown-address").addClass("hidden");
 						for (var i in suggestions) {
 							$(".dropdown-address ul").append("<li data-latitude='" + suggestions[i].lat + "' data-longitude='" + suggestions[i].lon + "'>" + suggestions[i].address + "</li>");
+						}
+						if ($(".dropdown-address").find("li").length) {
+							$(".dropdown-address").removeClass("hidden");
 						}
 					},
 					error: function() {
@@ -215,8 +218,21 @@ moment.locale('it');
 			}
 		}, 200);
 	});
-	$(document).on("click", function() {
-		$(".dropdown-address").addClass("hidden");
+	$(document).on("click", "#address", function() {
+		if ($(".dropdown-address").hasClass("hidden")) {
+			if ($(".dropdown-address").find("li").length) {
+				$(".dropdown-address").removeClass("hidden");
+			}
+		} else {
+			if ($("#address").val().length > 0) {
+				$(".dropdown-address").addClass("hidden");
+			}
+		}
+	});
+	$(document).on("click", function(event) {
+		if (!$(event.target).hasClass("address")) {
+			$(".dropdown-address").addClass("hidden");
+		}
 	});
 	$(document).on("click", ".dropdown-address ul li", function() {
 		$("#address").val($(this).text());
