@@ -490,13 +490,29 @@ function apiCallStatistics(startdate, enddate, first = false) {
 		dataType: "json",
 		success: function (data, message, xhr) {
 			if (xhr.status == 200) {
+				var dataCopy = data[0];
 				$("div.messageResult").empty();
 				var labelsCharts = [];
 				var dataCharts = [];
-				for (let i = 0; i < data[0].length; i++) {
-					labelsCharts.push(moment(data[0][i].date).format('L'));
-					dataCharts.push(data[0][i].views);
-				}
+				var k = 0;
+				do {
+					labelsCharts.push(moment(startdate, "DD-MM-YYYY").add(k,"day").format('L'));
+					if (dataCopy.length > 0) {
+						if (moment(dataCopy[0].date, "YYYY MM DD").format("L") == moment(startdate, "DD-MM-YYYY").add(k,"day").format("L")) {
+							dataCharts.push(dataCopy[0].views);
+							dataCopy.splice(0,1);
+						} else {
+							dataCharts.push(0);
+						}
+					} else {
+						dataCharts.push(0);
+					}
+					k++;
+				} while (moment(startdate, "DD-MM-YYYY").add(k,"day").isBefore(moment(enddate, "DD-MM-YYYY").add(1,"hour")));
+				// for (let i = 0; i < data[0].length; i++) {
+				// 	labelsCharts.push(moment(data[0][i].date).format('L'));
+				// 	dataCharts.push(data[0][i].views);
+				// }
 				if (first) {
 					generateChart(labelsCharts, dataCharts, dataCharts.reduce((a, b) => a + b, 0));
 				} else {
