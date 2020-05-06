@@ -20,7 +20,7 @@
 <div class="ap-show apartment-show">
 	<div class="ap-show__wrapper">
 		<div class="menu-left">
-			<a class="btn__menu" href="{{route("upr.apartments.index")}}"><i class="lni lni-chevron-left"></i>Indietro</a>
+			<a class="btn__menu" href="{{route("upr.apartment.index")}}"><i class="lni lni-chevron-left"></i>Indietro</a>
 		</div>
 		<div class="menu-right">
 		</div>
