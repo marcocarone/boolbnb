@@ -112,17 +112,17 @@ class ApartmentController extends Controller
 		$idUser = Auth::user()->id;
 		if ($apartment->user->id != $idUser) {
 			return redirect()->route('apartment.show', $apartment);
-			}
+		}
 
 
-			$data = [
-				'apartment' => $apartment,
-				'views' => $this->GetViews($apartment->id)
-			];
-			return view('upr.apartments.show', $data);
+		$data = [
+			'apartment' => $apartment,
+			'views' => $this->GetViews($apartment->id)
+		];
+		return view('upr.apartments.show', $data);
 	}
 
-	public function show2(Apartment $apartment)
+	public function gallery(Apartment $apartment)
 	{
 		if (empty($apartment)) {
 			abort('404');
@@ -224,7 +224,7 @@ class ApartmentController extends Controller
 			$apartment->services()->sync($data['services']);
 		}
 
-		return redirect()->route('upr.apartments.show', $apartment);
+		return redirect()->route('upr.apartment.show', $apartment);
 	}
 
 	/**
@@ -245,7 +245,7 @@ class ApartmentController extends Controller
 		}
 		$apartment->services()->detach();
 		$apartment->delete();
-		return redirect()->route('upr.apartments.index');
+		return redirect()->route('upr.apartment.index');
 	}
 
 

@@ -32,7 +32,7 @@
                     <div class="dropdown-menu dropdown-menu-center mt-3" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{{route("upr.dashboard")}}">Dashboard</a>
                         <a class="dropdown-item" href="{{route("upr.message.index")}}">Messaggi</a>
-                        <a class="dropdown-item" href="{{route("upr.apartments.index")}}">Gestisci gli annunci</a>
+                        <a class="dropdown-item" href="{{route("upr.apartment.index")}}">Gestisci gli annunci</a>
                         <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                      document.getElementById('logout-form').submit();">
                             {{ __('Esci') }}
@@ -45,7 +45,7 @@
                 </li>
 
                 <li>
-                    <a class="btn__menu" href="{{route("upr.apartments.create")}}"><i class="lni lni-plus"></i>Pubblica annuncio</a>
+                    <a class="btn__menu" href="{{route("upr.apartment.create")}}"><i class="lni lni-plus"></i>Pubblica annuncio</a>
                 </li>
                 @endguest
 
@@ -71,7 +71,7 @@
                         <div class="d-flex flex-column align-items-center">
                             <a class="" href="{{route("upr.dashboard")}}">Dashboard</a>
                             <a class="" href="{{route("upr.message.index")}}">Messaggi</a>
-                            <a class="" href="{{route("upr.apartments.index")}}">Gestisci gli annunci</a>
+                            <a class="" href="{{route("upr.apartment.index")}}">Gestisci gli annunci</a>
                             <a class="" href="{{ route('logout') }}" onclick="event.preventDefault();
                                    document.getElementById('logout-form').submit();">
                                 {{ __('Esci') }}
@@ -86,7 +86,7 @@
                 </li>
 
                 <li>
-                    <a class="btn__menu" href="{{route("upr.apartments.create")}}"><i class="lni lni-plus"></i>Pubblica annuncio</a>
+                    <a class="btn__menu" href="{{route("upr.apartment.create")}}"><i class="lni lni-plus"></i>Pubblica annuncio</a>
                 </li>
                 @endguest
 

@@ -497,13 +497,9 @@ function apiCallStatistics(startdate, enddate, first = false) {
 				var k = 0;
 				do {
 					labelsCharts.push(moment(startdate, "DD-MM-YYYY").add(k,"day").format('L'));
-					if (dataCopy.length > 0) {
-						if (moment(dataCopy[0].date, "YYYY MM DD").format("L") == moment(startdate, "DD-MM-YYYY").add(k,"day").format("L")) {
-							dataCharts.push(dataCopy[0].views);
-							dataCopy.splice(0,1);
-						} else {
-							dataCharts.push(0);
-						}
+					if (dataCopy.length > 0 && moment(dataCopy[0].date, "YYYY MM DD").format("L") == moment(startdate, "DD-MM-YYYY").add(k,"day").format("L")) {
+						dataCharts.push(dataCopy[0].views);
+						dataCopy.splice(0,1);
 					} else {
 						dataCharts.push(0);
 					}

@@ -17,11 +17,11 @@
 <div class="ap-show apartment-show">
     <div class="ap-show__wrapper">
         <div class="menu-left">
-            <a class="btn__menu" href="{{route("upr.apartments.index")}}"><i class="lni lni-chevron-left"></i>Indietro</a>
+            <a class="btn__menu" href="{{route("upr.apartment.index")}}"><i class="lni lni-chevron-left"></i>Indietro</a>
         </div>
         <div class="menu-right">
-            <a class="ap__btn" href="{{route("upr.apartments.edit", $apartment)}}">Modifica</a>
-            <a class="ap__btn" href="{{route("upr.apartment.show2", $apartment)}}">Galleria immagini</a>
+            <a class="ap__btn" href="{{route("upr.apartment.edit", $apartment)}}">Modifica</a>
+            <a class="ap__btn" href="{{route("upr.apartment.gallery", $apartment)}}">Galleria immagini</a>
         </div>
     </div>
 </div>

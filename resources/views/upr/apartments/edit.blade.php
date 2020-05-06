@@ -35,7 +35,7 @@
   <div class="ap-create-show__content">
       <div class="wrapper">
           <div class="left">
-  					<form action="{{route('upr.apartments.update', $apartment)}}" method="post" enctype="multipart/form-data">
+  					<form action="{{route('upr.apartment.update', $apartment)}}" method="post" enctype="multipart/form-data">
               @csrf
               @method('PATCH')
 

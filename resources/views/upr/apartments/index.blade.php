@@ -42,7 +42,7 @@
                                 Azioni
                             </button>
                             <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item" href="{{route("upr.apartments.show", $apartment)}}">Visualizza</a>
+                                <a class="dropdown-item" href="{{route("upr.apartment.show", $apartment)}}">Visualizza</a>
                                 <form action="{{route("upr.apartment.statistics", $apartment)}}" method="post">
                     							@csrf
                     							@method('POST')
@@ -54,7 +54,7 @@
                     							<button class="dropdown-item" type="submit">Sponsorizza</button>
                     						</form>
                                 <div class="dropdown-divider"></div>
-                                <form action="{{route("upr.apartments.destroy", $apartment)}}" method="post">
+                                <form action="{{route("upr.apartment.destroy", $apartment)}}" method="post">
                                     @csrf
                                     @method('DELETE')
                                     <button class="dropdown-item" type="submit">Elimina</button>
@@ -68,7 +68,7 @@
                 <div class="details">
                     <div class="tc_content">
                         <div class="tc_content__height">
-                            <a href="{{route("upr.apartments.show", $apartment)}}">
+                            <a href="{{route("upr.apartment.show", $apartment)}}">
                                 <h4>{{$apartment->title}}</h4>
                             </a>
                         </div>

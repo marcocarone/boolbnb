@@ -7,7 +7,7 @@
  <div class="ap-show">
      <div class="ap-show__wrapper">
          <div class="menu-left">
-             <a class="btn__menu" href="{{route("upr.apartments.show", $apartment)}}"><i class="lni lni-chevron-left"></i>Indietro</a>
+             <a class="btn__menu" href="{{route("upr.apartment.show", $apartment)}}"><i class="lni lni-chevron-left"></i>Indietro</a>
          </div>
          <div class="menu-right">
 
@@ -29,7 +29,7 @@
                                  @csrf
                              </form>
 
-                             <a class="ap__btn" href="{{route("upr.apartment.show2", $apartment)}}">Salva</a>
+                             <a class="ap__btn" href="{{route("upr.apartment.gallery", $apartment)}}">Salva</a>
                          </div>
                      </div>
                  </div>

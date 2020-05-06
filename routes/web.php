@@ -25,9 +25,9 @@ Auth::routes();
 
 Route::name('upr.')->prefix('upr')->namespace('Upr')->middleware('auth')->group(function () {
     Route::get('/dashboard', 'HomeController@index')->name('dashboard');
-    Route::resource('apartments', 'ApartmentController');
-    Route::get('/apartment/{apartment}', 'ApartmentController@show2')->name('apartment.show2');
-    Route::any('/apartment/statistics/{apartment}', 'ApartmentController@statistics')->name('apartment.statistics');
+    Route::resource('apartment', 'ApartmentController');
+    Route::get('/apartment/{apartment}/gallery', 'ApartmentController@gallery')->name('apartment.gallery');
+    Route::any('/apartment/{apartment}/statistics', 'ApartmentController@statistics')->name('apartment.statistics');
     Route::resource('images', 'ImageController');
     Route::post('delete', 'ImageController@deleteImage');
     Route::resource('message', 'MessageController');

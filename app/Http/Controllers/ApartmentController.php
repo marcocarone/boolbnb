@@ -29,7 +29,7 @@ class ApartmentController extends Controller
 		$advApt = Apartment::where('active', '1')->whereIn('id', $sponsoredApartments)->latest()->get();
 		$noAdvApt = Apartment::where('active', '1')->whereNotIn('id', $sponsoredApartments)->latest()->get();
 		$data = [
-			'advApt' => $advApt, 
+			'advApt' => $advApt,
 			'noAdvApt' => $noAdvApt
 			];
 
@@ -50,7 +50,7 @@ class ApartmentController extends Controller
 
 		if (!empty(Auth::user()->id)) {
 			if ($apartment->user->id == Auth::user()->id) {
-				return redirect()->route('upr.apartments.show', $apartment);
+				return redirect()->route('upr.apartment.show', $apartment);
 			}
 		}
 
