@@ -20,8 +20,20 @@
             <a class="btn__menu" href="{{route("upr.apartment.index")}}"><i class="lni lni-chevron-left"></i>Indietro</a>
         </div>
         <div class="menu-right">
-            <a class="ap__btn" href="{{route("upr.apartment.edit", $apartment)}}">Modifica</a>
-            <a class="ap__btn" href="{{route("upr.apartment.gallery", $apartment)}}">Galleria immagini</a>
+					<a class="ap__btn" href="{{route("upr.apartment.gallery", $apartment)}}">Galleria immagini</a>
+					<a class="ap__btn" href="{{route("upr.apartment.edit", $apartment)}}">Modifica</a>
+					{{-- <a class="ap__btn" href="{{route("upr.apartment.statistics", $apartment)}}">Statistiche</a>
+          <a class="ap__btn" href="{{route("upr.payment.process", $apartment)}}">Sponsorizza</a> --}}
+					<form class="d-inline ap__btn" action="{{route("upr.apartment.statistics", $apartment)}}" method="post">
+						@csrf
+						@method('POST')
+						<button class="ap__btn" type="submit">Statistiche</button>
+					</form>
+					<form class="d-inline ap__btn" action="{{route("upr.payment.process", $apartment)}}" method="post">
+						@csrf
+						@method('POST')
+						<button class="ap__btn" type="submit">Sponsorizza</button>
+					</form>
         </div>
     </div>
 </div>

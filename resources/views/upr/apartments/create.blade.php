@@ -44,7 +44,7 @@
 <div class="ap-create-show__content">
     <div class="wrapper">
         <div class="left">
-					<form action="{{route('upr.apartments.store')}}" method="post" enctype="multipart/form-data">
+					<form action="{{route('upr.apartment.store')}}" method="post" enctype="multipart/form-data">
 						@csrf
 						@method('POST')
 

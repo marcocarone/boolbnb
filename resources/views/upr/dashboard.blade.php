@@ -24,8 +24,8 @@
             <div class="box">
                 <ul>
                     <li><a href="{{route("upr.message.index")}}"><i class="lni lni-popup"></i>Messaggi</a></li>
-                    <li><a href="{{route("upr.apartments.index")}}"><i class="lni lni-pencil-alt"></i>Gestisci gli annunci</a></li>
-                    <li><a href="{{route("upr.apartments.create")}}"><i class="lni lni-plus"></i>Pubblica annuncio</a></li>
+                    <li><a href="{{route("upr.apartment.index")}}"><i class="lni lni-pencil-alt"></i>Gestisci gli annunci</a></li>
+                    <li><a href="{{route("upr.apartment.create")}}"><i class="lni lni-plus"></i>Pubblica annuncio</a></li>
                     <li><a href="{{ route('logout') }}" onclick="event.preventDefault();
                              document.getElementById('logout-form').submit();"><i class="lni lni-exit"></i>Esci</a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
