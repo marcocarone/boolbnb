@@ -31,6 +31,6 @@
         "mmenu-light": "^3.0.3",
         "moment": "^2.24.0",
         "pretty-checkbox": "^3.0.3",
-        "swiper": "^5.3.7"
+        "swiper": "^6.5.1"
     }
 }
